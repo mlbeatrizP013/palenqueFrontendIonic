@@ -11,7 +11,11 @@ import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/stan
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
 export class EstadoUserPage implements OnInit {
-
+  experiencias = [
+    { nombre: 'Cata de vinos', fecha: '2025-10-25', estado: 'pendiente' },
+    { nombre: 'Cata artesanal', fecha: '2025-10-18', estado: 'aprobada' },
+    { nombre: 'Cata gourmet', fecha: '2025-09-12', estado: 'rechazada' },
+  ];
   constructor() { }
 
   ngOnInit() {

@@ -1,13 +1,62 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>estadoUser</ion-title>
+  <ion-toolbar color="success">
+    <ion-title>Estado del Usuario</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="ion-padding lista-asistentes-container">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">estadoUser</ion-title>
+      <ion-title size="large">Estado del Usuario</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <h2>Estado de mis experiencias</h2>
+
+  @if (experiencias.length > 0) {
+    <table class="tabla-asistentes">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nombre</th>
+          <th>Fecha</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (exp of experiencias; track exp.nombre) {
+          <tr>
+            <td>{{ $index + 1 }}</td>
+            <td>{{ exp.nombre }}</td>
+            <td>{{ exp.fecha }}</td>
+            <td>
+              <span class="estado"
+                [class.pendiente]="exp.estado === 'pendiente'"
+                [class.aprobada]="exp.estado === 'aprobada'"
+                [class.rechazada]="exp.estado === 'rechazada'">
+                {{ exp.estado | titlecase }}
+              </span>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else {
+    <p class="sin-asistentes">No tienes experiencias registradas.</p>
+  }
+
+  <div class="asistencia-confirmada">
+    <h2>Asistencias Confirmadas</h2>
+    <ul>
+      @for (exp of experiencias; track exp.nombre) {
+        @if (exp.estado === 'aprobada') {
+          <li>
+            <strong>{{ exp.nombre }}</strong>
+            <span class="fecha">📅 {{ exp.fecha }}</span>
+          </li>
+        }
+      }
+    </ul>
+  </div>
 </ion-content>
+
