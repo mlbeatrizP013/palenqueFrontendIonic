@@ -1,0 +1,212 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>🎯 Gestión de Experiencias</ion-title>
+    <ion-button *ngIf="currentView() === 'list'" slot="end" (click)="navegarAFormulario()">
+      ➕ Nueva Experiencia
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ng-container *ngIf="currentView() === 'list'">
+    <div class="ion-padding">
+      <ng-container *ngIf="experiencias().length > 0; else noExperiencias">
+        <ion-grid>
+          <ion-row>
+            <ion-col *ngFor="let experiencia of experiencias(); let idx = index" size="12" size-md="6" size-lg="4">
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>🍸 {{ experiencia.nombre }}</ion-card-title>
+                </ion-card-header>
+
+                <ion-card-content>
+                  <ion-item lines="none">
+                    <ion-icon name="calendar" slot="start"></ion-icon>
+                    <ion-label>
+                      <p>📅 {{ experiencia.fecha }}</p>
+                      <p>⏰ {{ experiencia.hora }}</p>
+                    </ion-label>
+                  </ion-item>
+
+                  <p class="descripcion">{{ experiencia.descripcion }}</p>
+
+                  <ion-grid class="stats-grid">
+                    <ion-row>
+                      <ion-col>
+                        <div class="stat-item">
+                          <strong class="stat-number text-pink">
+                            {{ getAsistentesPorExperiencia(experiencia.id).length }}
+                          </strong>
+                          <span class="stat-label">Total Asistentes</span>
+                        </div>
+                      </ion-col>
+                      <ion-col>
+                        <div class="stat-item">
+                          <strong class="stat-number text-green">
+                            {{ getAsistentesAprobados(experiencia.id).length }}
+                          </strong>
+                          <span class="stat-label">Aprobados</span>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+
+                  <ion-grid class="actions-grid">
+                    <ion-row>
+                      <ion-col>
+                        <ion-button 
+                          expand="block" 
+                          color="warning" 
+                          size="small"
+                          (click)="navegarAEdicion(experiencia.id)">
+                          ✏️ Editar
+                        </ion-button>
+                      </ion-col>
+                      <ion-col>
+                        <ion-button 
+                          expand="block" 
+                          color="primary" 
+                          size="small"
+                          (click)="verAsistentesDeExperiencia(experiencia.id)">
+                          👥 Asistentes
+                        </ion-button>
+                      </ion-col>
+                      <ion-col>
+                        <ion-button 
+                          expand="block" 
+                          color="danger" 
+                          size="small"
+                          (click)="confirmarEliminar(experiencia.id)">
+                          🗑️ Eliminar
+                        </ion-button>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ng-container>
+
+      <ng-template #noExperiencias>
+        <div class="empty-state">
+          <ion-card>
+            <ion-card-content class="ion-text-center">
+              <h2>😴 No hay experiencias programadas</h2>
+              <p class="ion-margin-top">Comienza creando tu primera experiencia</p>
+              <ion-button 
+                class="ion-margin-top"
+                (click)="navegarAFormulario()">
+                ➕ Crear Primera Experiencia
+              </ion-button>
+            </ion-card-content>
+          </ion-card>
+        </div>
+      </ng-template>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="currentView() === 'form'">
+    <div class="ion-padding">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>
+            {{ isEditMode() ? '✏️ Editar Experiencia' : '➕ Agregar Nueva Experiencia' }}
+          </ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <form [formGroup]="experienciaForm">
+            <!-- Nombre -->
+            <ion-item>
+              <ion-label position="stacked">🏷️ Nombre *</ion-label>
+              <ion-input 
+                formControlName="nombre" 
+                placeholder="Ej: Cata de Tequila Ultra Premium"
+                type="text">
+              </ion-input>
+            </ion-item>
+            <ion-text *ngIf="experienciaForm.get('nombre')?.invalid && experienciaForm.get('nombre')?.touched" color="danger" class="ion-padding-start">
+              <small>Nombre requerido (mín. 3 caracteres)</small>
+            </ion-text>
+
+            <!-- Fecha y Hora -->
+            <ion-grid>
+              <ion-row>
+                <ion-col size="12" size-md="6">
+                  <ion-item>
+                    <ion-label position="stacked">📅 Fecha *</ion-label>
+                    <ion-input 
+                      formControlName="fecha" 
+                      type="date">
+                    </ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="12" size-md="6">
+                  <ion-item>
+                    <ion-label position="stacked">⏰ Hora *</ion-label>
+                    <ion-input 
+                      formControlName="hora" 
+                      type="time">
+                    </ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+            <!-- Descripción -->
+            <ion-item>
+              <ion-label position="stacked">📝 Descripción</ion-label>
+              <ion-textarea 
+                formControlName="descripcion" 
+                rows="4" 
+                placeholder="Detalles de la experiencia, lugar, costo, etc.">
+              </ion-textarea>
+            </ion-item>
+
+            <!-- Acciones del Formulario -->
+            <ion-grid class="ion-margin-top">
+              <ion-row>
+                <ion-col>
+                  <ion-button 
+                    expand="block" 
+                    color="medium" 
+                    (click)="navegarALista()">
+                    ↩️ Cancelar
+                  </ion-button>
+                </ion-col>
+                <ion-col>
+                  <ion-button 
+                    expand="block" 
+                    color="primary" 
+                    (click)="guardar()"
+                    [disabled]="experienciaForm.invalid">
+                    💾 {{ isEditMode() ? 'Actualizar' : 'Guardar' }}
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </form>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </ng-container>
+
+  <!-- Action Sheet para acciones -->
+  <ion-action-sheet
+    [isOpen]="isActionSheetOpen()"
+    header="Acciones"
+    [buttons]="actionSheetButtons"
+    (didDismiss)="cerrarAcciones()">
+  </ion-action-sheet>
+
+  <!-- Alert para confirmar eliminación -->
+  <ion-alert
+    [isOpen]="isDeleteAlertOpen()"
+    header="Confirmar Eliminación"
+    message="¿Estás seguro de que quieres eliminar esta experiencia?"
+    [buttons]="alertButtons"
+    (didDismiss)="isDeleteAlertOpen.set(false)">
+  </ion-alert>
+</ion-content>

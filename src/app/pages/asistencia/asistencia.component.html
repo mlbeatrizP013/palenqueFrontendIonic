@@ -1,0 +1,133 @@
+<ion-header [translucent]="true"> 
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="volver()">
+        <ion-icon slot="start" name="arrow-back"></ion-icon>
+        Volver
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      👥 Asistentes: {{ experienciaEditando()?.nombre || 'Experiencia Desconocida' }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="ion-padding">
+    <ng-container *ngIf="asistentesParaExperiencia().length > 0; else emptyState">
+      <!-- Lista de asistentes -->
+      <ion-list>
+        <ion-item *ngFor="let asistente of asistentesParaExperiencia(); let i = index">
+          <ion-label>
+            <h2>{{ i + 1 }}. {{ asistente.nombre }}</h2>
+            <p>
+              <ion-icon name="mail" class="ion-align-items-start"></ion-icon>
+              {{ asistente.correo }}
+            </p>
+            <p>
+              <ion-icon name="calendar" class="ion-align-items-start"></ion-icon>
+              {{ formatFecha(asistente.fechaSolicitud) }}
+            </p>
+          </ion-label>
+
+          <div slot="end" class="ion-text-end">
+            <ion-badge [color]="getEstadoColor(asistente.estado)" class="ion-margin-bottom">
+              {{ getEstadoTexto(asistente.estado) }}
+            </ion-badge>
+
+            <div class="ion-margin-top">
+              <ion-button *ngIf="asistente.estado !== 'aprobada'" 
+                size="small" 
+                color="success" 
+                fill="clear"
+                (click)="confirmarAprobar(asistente)">
+                <ion-icon name="checkmark" slot="icon-only"></ion-icon>
+              </ion-button>
+
+              <ion-button *ngIf="asistente.estado !== 'rechazada'" 
+                size="small" 
+                color="danger" 
+                fill="clear"
+                (click)="confirmarRechazar(asistente)">
+                <ion-icon name="close" slot="icon-only"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        </ion-item>
+      </ion-list>
+
+      <!-- Resumen de Asistencia -->
+      <ion-card class="ion-margin-top">
+        <ion-card-header>
+          <ion-card-title>Resumen</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12" size-md="4">
+                <div class="stat-card">
+                  <div class="stat-number text-primary">{{ asistentesParaExperiencia().length }}</div>
+                  <div class="stat-label">Total Registrados</div>
+                </div>
+              </ion-col>
+
+              <ng-container *ngIf="experienciaEditando()">
+                <ion-col size="12" size-md="4">
+                  <div class="stat-card">
+                    <div class="stat-number text-success">{{ getAsistentesAprobados(experienciaEditando()!.id).length }}</div>
+                    <div class="stat-label">Asistentes Aprobados</div>
+                  </div>
+                </ion-col>
+
+                <ion-col size="12" size-md="4">
+                  <div class="stat-card">
+                    <div class="stat-number text-warning">{{ getAsistentesPendientes(experienciaEditando()!.id).length }}</div>
+                    <div class="stat-label">Pendientes</div>
+                  </div>
+                </ion-col>
+              </ng-container>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
+
+    <ng-template #emptyState>
+      <ion-card>
+        <ion-card-content class="ion-text-center empty-state">
+          <h2>😴 No hay asistentes registrados</h2>
+          <p class="ion-margin-top">
+            No hay asistentes registrados para esta experiencia.
+          </p>
+        </ion-card-content>
+      </ion-card>
+    </ng-template>
+  </div>
+
+  <!-- Action Sheet para acciones rápidas -->
+  <ion-action-sheet
+    [isOpen]="isActionSheetOpen()"
+    header="Acciones para {{ selectedAsistente()?.nombre }}"
+    [buttons]="actionSheetButtons"
+    (didDismiss)="isActionSheetOpen.set(false)">
+  </ion-action-sheet>
+
+  <!-- Alert para confirmar aprobación -->
+  <ion-alert
+    [isOpen]="isAprobarAlertOpen()"
+    header="Confirmar Aprobación"
+    [message]="'¿Estás seguro de que quieres aprobar a ' + selectedAsistente()?.nombre + '?'"
+    [buttons]="alertButtons"
+    (didDismiss)="isAprobarAlertOpen.set(false)">
+  </ion-alert>
+
+  <!-- Alert para confirmar rechazo -->
+  <ion-alert
+    [isOpen]="isRechazarAlertOpen()"
+    header="Confirmar Rechazo"
+    [message]="'¿Estás seguro de que quieres rechazar a ' + selectedAsistente()?.nombre + '?'"
+    [buttons]="alertButtons"
+    (didDismiss)="isRechazarAlertOpen.set(false)">
+  </ion-alert>
+</ion-content>
