@@ -1,0 +1,68 @@
+.descripcion {
+  color: var(--ion-color-medium);
+  margin: 16px 0;
+  line-height: 1.5;
+}
+
+.stats-grid {
+  margin: 16px 0;
+  padding: 16px 0;
+  border-top: 1px solid var(--ion-color-light);
+  border-bottom: 1px solid var(--ion-color-light);
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 24px;
+  display: block;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--ion-color-medium);
+  display: block;
+  margin-top: 4px;
+}
+
+.text-pink {
+  color: var(--ion-color-danger);
+}
+
+.text-green {
+  color: var(--ion-color-success);
+}
+
+.actions-grid {
+  margin-top: 16px;
+}
+
+.empty-state {
+  max-width: 400px;
+  margin: 40px auto;
+}
+
+.empty-state h2 {
+  color: var(--ion-color-medium);
+  margin-bottom: 16px;
+}
+
+/* Asegurar que los botones tengan el mismo tamaño */
+.actions-grid ion-button {
+  --padding-start: 8px;
+  --padding-end: 8px;
+}
+
+/* Estilos para el formulario */
+form {
+  padding: 8px 0;
+}
+
+ion-item {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  margin-bottom: 16px;
+}
