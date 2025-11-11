@@ -1,0 +1,133 @@
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>{{ productoEditando() ? 'Editar Producto' : 'Crear Producto' }}</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <form [formGroup]="productoForm">
+      <!-- Nombre -->
+      <ion-item>
+        <ion-label position="floating">Nombre del Producto</ion-label>
+        <ion-input
+          type="text"
+          formControlName="nombre"
+          placeholder="Ej. Tequila Blanco Don Julio"
+        ></ion-input>
+      </ion-item>
+      <ion-text *ngIf="productoForm.get('nombre')?.invalid && productoForm.get('nombre')?.touched" color="danger">
+        <p>
+          <small *ngIf="productoForm.get('nombre')?.errors?.['required']">El nombre es requerido</small>
+          <small *ngIf="productoForm.get('nombre')?.errors?.['minlength']">Mínimo 3 caracteres</small>
+        </p>
+      </ion-text>
+
+      <!-- Categoría -->
+      <ion-item>
+        <ion-label position="floating">Categoría</ion-label>
+        <ion-select formControlName="categoria" placeholder="Selecciona una categoría">
+          <ion-select-option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-text *ngIf="productoForm.get('categoria')?.invalid && productoForm.get('categoria')?.touched" color="danger">
+        <p><small>La categoría es requerida</small></p>
+      </ion-text>
+
+      <!-- Descripción -->
+      <ion-item>
+        <ion-label position="floating">Descripción</ion-label>
+        <ion-textarea
+          formControlName="descripcion"
+          placeholder="Ingresa la descripción del producto..."
+          rows="3"
+        ></ion-textarea>
+      </ion-item>
+      <ion-text *ngIf="productoForm.get('descripcion')?.invalid && productoForm.get('descripcion')?.touched" color="danger">
+        <p>
+          <small *ngIf="productoForm.get('descripcion')?.errors?.['required']">La descripción es requerida</small>
+          <small *ngIf="productoForm.get('descripcion')?.errors?.['minlength']">Mínimo 5 caracteres</small>
+        </p>
+      </ion-text>
+
+      <!-- Precio -->
+      <ion-item>
+        <ion-label position="floating">Precio (MXN)</ion-label>
+        <ion-input
+          type="number"
+          formControlName="precioMXN"
+          placeholder="0.00"
+          step="0.01"
+        ></ion-input>
+      </ion-item>
+      <ion-text *ngIf="productoForm.get('precioMXN')?.invalid && productoForm.get('precioMXN')?.touched" color="danger">
+        <p><small>Ingresa un precio válido (≥ 0)</small></p>
+      </ion-text>
+
+      <!-- Stock Inicial -->
+      <ion-item>
+        <ion-label position="floating">Stock Inicial</ion-label>
+        <ion-input
+          type="number"
+          formControlName="stockInicial"
+          placeholder="0"
+          min="1"
+        ></ion-input>
+      </ion-item>
+      <ion-text *ngIf="productoForm.get('stockInicial')?.invalid && productoForm.get('stockInicial')?.touched" color="danger">
+        <p><small>El stock inicial debe ser ≥ 1</small></p>
+      </ion-text>
+
+      <!-- Stock Mínimo -->
+      <ion-item>
+        <ion-label position="floating">Stock Mínimo</ion-label>
+        <ion-input
+          type="number"
+          formControlName="stockMinimo"
+          placeholder="0"
+          min="0"
+        ></ion-input>
+      </ion-item>
+      <ion-text *ngIf="productoForm.get('stockMinimo')?.invalid && productoForm.get('stockMinimo')?.touched" color="danger">
+        <p><small>El stock mínimo debe ser ≥ 0</small></p>
+      </ion-text>
+
+      <!-- Imagen URL -->
+      <ion-item>
+        <ion-label position="floating">URL de Imagen</ion-label>
+        <ion-input
+          type="url"
+          formControlName="imagen"
+          placeholder="https://ejemplo.com/imagen.jpg"
+        ></ion-input>
+      </ion-item>
+      <ion-text *ngIf="productoForm.get('imagen')?.invalid && productoForm.get('imagen')?.touched" color="danger">
+        <p><small>La URL de imagen es requerida</small></p>
+      </ion-text>
+
+      <!-- Botones -->
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+            <ion-button
+              expand="block"
+              color="danger"
+              (click)="onCancelar()"
+            >
+              <ion-icon slot="start" name="close"></ion-icon>
+              Cancelar
+            </ion-button>
+          </ion-col>
+          <ion-col size="6">
+            <ion-button
+              expand="block"
+              color="success"
+              [disabled]="!productoForm.valid"
+              (click)="guardar()"
+            >
+              <ion-icon slot="start" name="checkmark"></ion-icon>
+              Guardar
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+  </ion-card-content>
+</ion-card>

@@ -35,3 +35,58 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+/* App-wide typography and colors */
+html, body, app-root {
+	height: 100%;
+	background: var(--tierra);
+	font-family: var(--font-body);
+	color: var(--negro-carbon);
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: var(--font-heading);
+	color: var(--negro-carbon);
+}
+
+/* Header / toolbar */
+ion-header ion-toolbar {
+	--background: var(--marron-agave);
+	color: #ffffff; /* header titles use white for good contrast */
+}
+
+/* Primary buttons */
+ion-button[fill="solid"], ion-button[color="primary"] {
+	--background: var(--verde-agave);
+	--color: #ffffff;
+}
+
+/* Cards and content background */
+ion-card {
+	background: var(--tierra);
+	color: var(--negro-carbon);
+}
+
+/* Accent/icon colors */
+.icon-cobre {
+	color: var(--cobre) !important;
+}
+
+.text-muted {
+	color: var(--gris-ceniza);
+}
+
+/* Status badges helpers (used by producto-card) */
+.status-active {
+	--background: var(--verde-agave);
+	color: #fff;
+}
+.status-low {
+	--background: #f1c40f; /* yellow-ish for low stock (kept visible) */
+	color: #111;
+}
+.status-out {
+	--background: var(--rojo-maguey);
+	color: #fff;
+}
+

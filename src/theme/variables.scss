@@ -1,2 +1,20 @@
-// For information on how to create your own theme, please see:
-// http://ionicframework.com/docs/theming/
+// App color variables (brand palette)
+:root {
+	--marron-agave: #5B4636; /* header background, brand */
+	--verde-agave: #3A644D; /* primary/confirm buttons */
+	--tierra: #F4F4F4; /* page/card background */
+	--cobre: #A98C6D; /* menu icons, active indicators */
+	--rojo-maguey: #C0392B; /* alert / accent */
+	--negro-carbon: #1A1A1A; /* titles, labels, body text */
+	--gris-ceniza: #757575; /* descriptions, metadata */
+
+	--font-heading: 'Merriweather', serif;
+	--font-body: 'Roboto', sans-serif;
+
+	/* Ionic color tokens */
+	--ion-color-primary: var(--verde-agave);
+	--ion-color-primary-contrast: #ffffff;
+	--ion-background-color: var(--tierra);
+}
+
+/* Fallback comment: adjust additional Ionic tokens if necessary */

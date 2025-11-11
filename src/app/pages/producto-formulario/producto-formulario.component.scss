@@ -1,0 +1,29 @@
+ion-card {
+  ion-item {
+    margin-bottom: 8px;
+
+    ion-input,
+    ion-textarea,
+    ion-select {
+      font-size: 14px;
+    }
+  }
+
+  ion-text {
+    display: block;
+    margin-top: 4px;
+    margin-bottom: 12px;
+
+    p {
+      margin: 0;
+      font-size: 12px;
+    }
+  }
+
+  ion-grid {
+    ion-button {
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+  }
+}

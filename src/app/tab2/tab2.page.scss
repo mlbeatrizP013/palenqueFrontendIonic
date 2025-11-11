@@ -1,0 +1,27 @@
+:host {
+  ion-searchbar {
+    margin-bottom: 12px;
+  }
+
+  app-producto-card {
+    display: block;
+    margin-bottom: 12px;
+  }
+}
+
+/* Header + content */
+:host {
+  ion-header ion-toolbar {
+    --background: var(--marron-agave);
+    color: #fff;
+  }
+
+  ion-content {
+    background: var(--tierra);
+  }
+
+  app-producto-card, ion-card {
+    background: var(--tierra);
+    color: var(--negro-carbon);
+  }
+}

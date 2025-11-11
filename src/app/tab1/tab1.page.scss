@@ -1,0 +1,17 @@
+:host {
+	ion-header ion-toolbar {
+		--background: var(--marron-agave);
+		color: #fff;
+	}
+
+	ion-content {
+		background: var(--tierra);
+	}
+
+	/* Make cards consistent */
+	app-experiencia, app-asistencia, ion-card {
+		background: var(--tierra);
+		color: var(--negro-carbon);
+	}
+}
+

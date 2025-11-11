@@ -1,0 +1,67 @@
+<ion-card (click)="onVerDetalle()" class="producto-card">
+  <ion-card-header>
+    <div class="card-header-content">
+      <ion-badge [color]="getStatusColor()">{{ getStatusLabel() }}</ion-badge>
+    </div>
+  </ion-card-header>
+
+  <ion-card-content class="card-content">
+    <!-- Imagen del Producto -->
+    <div class="product-image">
+      <img [src]="producto().imagen" [alt]="producto().nombre" />
+    </div>
+
+    <!-- Información del Producto -->
+    <ion-text class="product-info">
+      <h3>{{ producto().nombre }}</h3>
+      <p class="categoria">{{ producto().categoria }}</p>
+      <p class="descripcion">{{ producto().descripcion }}</p>
+    </ion-text>
+
+    <!-- Precios y Stock -->
+    <ion-grid class="info-grid" fixed>
+      <ion-row>
+        <ion-col size="6">
+          <ion-text class="info-item">
+            <label>Precio</label>
+            <p class="precio">{{ producto().precioMXN | currency: 'MXN' }}</p>
+          </ion-text>
+        </ion-col>
+        <ion-col size="6">
+          <ion-text class="info-item">
+            <label>Stock</label>
+            <p class="stock">{{ producto().stockActual }} unidades</p>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <!-- Acciones -->
+    <ion-grid class="actions-grid" fixed>
+      <ion-row>
+        <ion-col size="6">
+          <ion-button
+            expand="block"
+            color="primary"
+            size="small"
+            (click)="onEditar($event)"
+          >
+            <ion-icon slot="start" name="pencil"></ion-icon>
+            Editar
+          </ion-button>
+        </ion-col>
+        <ion-col size="6">
+          <ion-button
+            expand="block"
+            color="danger"
+            size="small"
+            (click)="onEliminar($event)"
+          >
+            <ion-icon slot="start" name="trash"></ion-icon>
+            Eliminar
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card-content>
+</ion-card>

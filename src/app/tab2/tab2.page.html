@@ -1,17 +1,70 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Tab 2
-    </ion-title>
+    <ion-title>Productos</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <ng-container *ngIf="currentView() === 'list'">
+  <ion-searchbar value="" (ionInput)="searchTerm.set($event.detail.value ?? '')"></ion-searchbar>
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+  <ion-segment value="todos" (ionChange)="onFilterChange($event)">
+      <ion-segment-button value="todos"><ion-label>Todos</ion-label></ion-segment-button>
+      <ion-segment-button value="activo"><ion-label>Activos</ion-label></ion-segment-button>
+      <ion-segment-button value="stock_bajo"><ion-label>Stock Bajo</ion-label></ion-segment-button>
+      <ion-segment-button value="sin_stock"><ion-label>Sin Stock</ion-label></ion-segment-button>
+    </ion-segment>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" size-md="6" *ngFor="let p of productosFiltrados()">
+          <app-producto-card
+            [producto]="p"
+            (verDetalle)="verDetalle($event)"
+            (editar)="editarProducto($event)"
+            (eliminar)="eliminarProducto($event)">
+          </app-producto-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button (click)="nuevaProducto()">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </ng-container>
+
+  <ng-container *ngIf="currentView() === 'form'">
+    <app-producto-formulario
+      [productoEditando]="productoEditando()"
+      (guardarProducto)="guardarProducto($event)"
+      (cancelar)="cancelarForm()">
+    </app-producto-formulario>
+  </ng-container>
+
+  <ng-container *ngIf="currentView() === 'detalle'">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>{{ productoSeleccionado()?.nombre }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <img [src]="productoSeleccionado()?.imagen" alt="imagen" style="width:100%;height:auto;border-radius:8px;" />
+        <p>{{ productoSeleccionado()?.descripcion }}</p>
+        <p><strong>Precio:</strong> {{ productoSeleccionado()?.precioMXN | currency:'MXN' }}</p>
+        <p><strong>Stock:</strong> {{ productoSeleccionado()?.stockActual }} unidades</p>
+
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-button expand="block" (click)="editarDelDetalle(productoSeleccionado()!)">Editar</ion-button>
+            </ion-col>
+            <ion-col>
+              <ion-button expand="block" color="medium" (click)="volverALista()">Volver</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
 </ion-content>

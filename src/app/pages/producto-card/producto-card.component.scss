@@ -1,0 +1,113 @@
+.producto-card {
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  }
+
+  ion-card-header {
+    padding-bottom: 8px;
+
+    .card-header-content {
+      display: flex;
+      justify-content: flex-end;
+
+      ion-badge {
+        font-weight: 600;
+        padding: 4px 12px;
+        font-size: 12px;
+      }
+    }
+  }
+
+  .card-content {
+    padding: 12px 0;
+
+    .product-image {
+      width: 100%;
+      height: 200px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #f0f0f0;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .product-info {
+      h3 {
+        margin: 8px 0 4px 0;
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .categoria {
+        margin: 0;
+        font-size: 12px;
+        color: #999;
+        font-style: italic;
+        margin-bottom: 8px;
+      }
+
+      .descripcion {
+        margin: 0;
+        font-size: 13px;
+        color: #666;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+    }
+
+    .info-grid {
+      margin: 12px 0;
+
+      .info-item {
+        label {
+          display: block;
+          font-size: 11px;
+          font-weight: 600;
+          color: #999;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          margin-bottom: 4px;
+        }
+
+        p {
+          margin: 0;
+          font-size: 14px;
+          font-weight: 600;
+
+          &.precio {
+            color: #27ae60;
+          }
+
+          &.stock {
+            color: #3498db;
+          }
+        }
+      }
+    }
+
+    .actions-grid {
+      margin-top: 12px;
+
+      ion-button {
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        height: 36px;
+      }
+    }
+  }
+}
