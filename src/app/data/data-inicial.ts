@@ -74,7 +74,7 @@ export const productosIniciales: Producto[] = [
     stockInicial: 50,
     stockActual: 50,
     stockMinimo: 10,
-    imagen: 'https://images.unsplash.com/photo-1608270861620-7b1c2dfdf092?w=300&h=400&fit=crop',
+    imagen: 'https://images.unsplash.com/photo-1612528443702-f6741f70a049?w=300&h=400&fit=crop',
     estado: 'activo',
     fechaCreacion: new Date('2025-10-01')
   },
@@ -87,7 +87,7 @@ export const productosIniciales: Producto[] = [
     stockInicial: 30,
     stockActual: 3,
     stockMinimo: 10,
-    imagen: 'https://images.unsplash.com/photo-1514432324607-2e467f4af445?w=300&h=400&fit=crop',
+    imagen: 'https://images.unsplash.com/photo-1612528443702-f6741f70a049?w=300&h=400&fit=crop',
     estado: 'stock_bajo',
     fechaCreacion: new Date('2025-09-15')
   },
@@ -113,7 +113,7 @@ export const productosIniciales: Producto[] = [
     stockInicial: 40,
     stockActual: 40,
     stockMinimo: 12,
-    imagen: 'https://images.unsplash.com/photo-1608270861620-7b1c2dfdf092?w=300&h=400&fit=crop',
+    imagen: 'https://images.unsplash.com/photo-1612528443702-f6741f70a049?w=300&h=400&fit=crop',
     estado: 'activo',
     fechaCreacion: new Date('2025-10-10')
   },
@@ -126,7 +126,7 @@ export const productosIniciales: Producto[] = [
     stockInicial: 35,
     stockActual: 35,
     stockMinimo: 10,
-    imagen: 'https://images.unsplash.com/photo-1608270861620-7b1c2dfdf092?w=300&h=400&fit=crop',
+    imagen: 'https://images.unsplash.com/photo-1612528443702-f6741f70a049?w=300&h=400&fit=crop',
     estado: 'activo',
     fechaCreacion: new Date('2025-10-12')
   },
@@ -139,7 +139,7 @@ export const productosIniciales: Producto[] = [
     stockInicial: 100,
     stockActual: 15,
     stockMinimo: 30,
-    imagen: 'https://images.unsplash.com/photo-1608270861620-7b1c2dfdf092?w=300&h=400&fit=crop',
+    imagen: 'https://images.unsplash.com/photo-1612528443702-f6741f70a049?w=300&h=400&fit=crop',
     estado: 'stock_bajo',
     fechaCreacion: new Date('2025-10-20')
   }

@@ -5,10 +5,10 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ng-container *ngIf="currentView() === 'list'">
-  <ion-searchbar value="" (ionInput)="searchTerm.set($event.detail.value ?? '')"></ion-searchbar>
+  @if(currentView() === 'list') {
+    <ion-searchbar value="" (ionInput)="searchTerm.set($event.detail.value ?? '')"></ion-searchbar>
 
-  <ion-segment value="todos" (ionChange)="onFilterChange($event)">
+    <ion-segment value="todos" (ionChange)="onFilterChange($event)">
       <ion-segment-button value="todos"><ion-label>Todos</ion-label></ion-segment-button>
       <ion-segment-button value="activo"><ion-label>Activos</ion-label></ion-segment-button>
       <ion-segment-button value="stock_bajo"><ion-label>Stock Bajo</ion-label></ion-segment-button>
@@ -17,14 +17,16 @@
 
     <ion-grid>
       <ion-row>
-        <ion-col size="12" size-md="6" *ngFor="let p of productosFiltrados()">
-          <app-producto-card
-            [producto]="p"
-            (verDetalle)="verDetalle($event)"
-            (editar)="editarProducto($event)"
-            (eliminar)="eliminarProducto($event)">
-          </app-producto-card>
-        </ion-col>
+        @for (p of productosFiltrados(); track p.id) {
+          <ion-col size="12" size-md="6">
+            <app-producto-card
+              [producto]="p"
+              (verDetalle)="verDetalle($event)"
+              (editar)="editarProducto($event)"
+              (eliminar)="eliminarProducto($event)">
+            </app-producto-card>
+          </ion-col>
+        }
       </ion-row>
     </ion-grid>
 
@@ -33,17 +35,13 @@
         <ion-icon name="add"></ion-icon>
       </ion-fab-button>
     </ion-fab>
-  </ng-container>
-
-  <ng-container *ngIf="currentView() === 'form'">
+  } @else if(currentView() === 'form') {
     <app-producto-formulario
       [productoEditando]="productoEditando()"
       (guardarProducto)="guardarProducto($event)"
       (cancelar)="cancelarForm()">
     </app-producto-formulario>
-  </ng-container>
-
-  <ng-container *ngIf="currentView() === 'detalle'">
+  } @else if(currentView() === 'detalle') {
     <ion-card>
       <ion-card-header>
         <ion-card-title>{{ productoSeleccionado()?.nombre }}</ion-card-title>
@@ -66,5 +64,5 @@
         </ion-grid>
       </ion-card-content>
     </ion-card>
-  </ng-container>
+  }
 </ion-content>

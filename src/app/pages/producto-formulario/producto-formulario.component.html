@@ -13,23 +13,33 @@
           placeholder="Ej. Tequila Blanco Don Julio"
         ></ion-input>
       </ion-item>
-      <ion-text *ngIf="productoForm.get('nombre')?.invalid && productoForm.get('nombre')?.touched" color="danger">
-        <p>
-          <small *ngIf="productoForm.get('nombre')?.errors?.['required']">El nombre es requerido</small>
-          <small *ngIf="productoForm.get('nombre')?.errors?.['minlength']">Mínimo 3 caracteres</small>
-        </p>
-      </ion-text>
+      @if(productoForm.get('nombre')?.invalid && productoForm.get('nombre')?.touched) {
+        <ion-text color="danger">
+          <p>
+            @if(productoForm.get('nombre')?.errors?.['required']) {
+              <small>El nombre es requerido</small>
+            }
+            @if(productoForm.get('nombre')?.errors?.['minlength']) {
+              <small>Mínimo 3 caracteres</small>
+            }
+          </p>
+        </ion-text>
+      }
 
       <!-- Categoría -->
       <ion-item>
         <ion-label position="floating">Categoría</ion-label>
         <ion-select formControlName="categoria" placeholder="Selecciona una categoría">
-          <ion-select-option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</ion-select-option>
+          @for (cat of categorias; track cat) {
+            <ion-select-option [value]="cat">{{ cat }}</ion-select-option>
+          }
         </ion-select>
       </ion-item>
-      <ion-text *ngIf="productoForm.get('categoria')?.invalid && productoForm.get('categoria')?.touched" color="danger">
-        <p><small>La categoría es requerida</small></p>
-      </ion-text>
+      @if(productoForm.get('categoria')?.invalid && productoForm.get('categoria')?.touched) {
+        <ion-text color="danger">
+          <p><small>La categoría es requerida</small></p>
+        </ion-text>
+      }
 
       <!-- Descripción -->
       <ion-item>
@@ -40,12 +50,18 @@
           rows="3"
         ></ion-textarea>
       </ion-item>
-      <ion-text *ngIf="productoForm.get('descripcion')?.invalid && productoForm.get('descripcion')?.touched" color="danger">
-        <p>
-          <small *ngIf="productoForm.get('descripcion')?.errors?.['required']">La descripción es requerida</small>
-          <small *ngIf="productoForm.get('descripcion')?.errors?.['minlength']">Mínimo 5 caracteres</small>
-        </p>
-      </ion-text>
+      @if(productoForm.get('descripcion')?.invalid && productoForm.get('descripcion')?.touched) {
+        <ion-text color="danger">
+          <p>
+            @if(productoForm.get('descripcion')?.errors?.['required']) {
+              <small>La descripción es requerida</small>
+            }
+            @if(productoForm.get('descripcion')?.errors?.['minlength']) {
+              <small>Mínimo 5 caracteres</small>
+            }
+          </p>
+        </ion-text>
+      }
 
       <!-- Precio -->
       <ion-item>
@@ -57,9 +73,11 @@
           step="0.01"
         ></ion-input>
       </ion-item>
-      <ion-text *ngIf="productoForm.get('precioMXN')?.invalid && productoForm.get('precioMXN')?.touched" color="danger">
-        <p><small>Ingresa un precio válido (≥ 0)</small></p>
-      </ion-text>
+      @if(productoForm.get('precioMXN')?.invalid && productoForm.get('precioMXN')?.touched) {
+        <ion-text color="danger">
+          <p><small>Ingresa un precio válido (≥ 0)</small></p>
+        </ion-text>
+      }
 
       <!-- Stock Inicial -->
       <ion-item>
@@ -71,9 +89,11 @@
           min="1"
         ></ion-input>
       </ion-item>
-      <ion-text *ngIf="productoForm.get('stockInicial')?.invalid && productoForm.get('stockInicial')?.touched" color="danger">
-        <p><small>El stock inicial debe ser ≥ 1</small></p>
-      </ion-text>
+      @if(productoForm.get('stockInicial')?.invalid && productoForm.get('stockInicial')?.touched) {
+        <ion-text color="danger">
+          <p><small>El stock inicial debe ser ≥ 1</small></p>
+        </ion-text>
+      }
 
       <!-- Stock Mínimo -->
       <ion-item>
@@ -85,9 +105,11 @@
           min="0"
         ></ion-input>
       </ion-item>
-      <ion-text *ngIf="productoForm.get('stockMinimo')?.invalid && productoForm.get('stockMinimo')?.touched" color="danger">
-        <p><small>El stock mínimo debe ser ≥ 0</small></p>
-      </ion-text>
+      @if(productoForm.get('stockMinimo')?.invalid && productoForm.get('stockMinimo')?.touched) {
+        <ion-text color="danger">
+          <p><small>El stock mínimo debe ser ≥ 0</small></p>
+        </ion-text>
+      }
 
       <!-- Imagen URL -->
       <ion-item>
@@ -98,9 +120,11 @@
           placeholder="https://ejemplo.com/imagen.jpg"
         ></ion-input>
       </ion-item>
-      <ion-text *ngIf="productoForm.get('imagen')?.invalid && productoForm.get('imagen')?.touched" color="danger">
-        <p><small>La URL de imagen es requerida</small></p>
-      </ion-text>
+      @if(productoForm.get('imagen')?.invalid && productoForm.get('imagen')?.touched) {
+        <ion-text color="danger">
+          <p><small>La URL de imagen es requerida</small></p>
+        </ion-text>
+      }
 
       <!-- Botones -->
       <ion-grid>

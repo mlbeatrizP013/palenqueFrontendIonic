@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ng-container *ngIf="currentView() === 'experiencias'">
+  @if(currentView() === 'experiencias') {
     <app-experiencia
       [experiencias]="experiencias()"
       [asistentes]="asistentes()"
@@ -13,9 +13,7 @@
       (eliminarExperiencia)="eliminarExperiencia($event)"
       (verAsistentes)="verAsistentes($event)">
     </app-experiencia>
-  </ng-container>
-
-  <ng-container *ngIf="currentView() === 'asistentes'">
+  } @else if(currentView() === 'asistentes') {
     <app-asistencia
       [experiencias]="experiencias()"
       [asistentes]="asistentes()"
@@ -24,5 +22,5 @@
       (rechazarAsistente)="rechazarAsistente($event)"
       (volverGestion)="volverAExperiencias()">
     </app-asistencia>
-  </ng-container>
+  }
 </ion-content>

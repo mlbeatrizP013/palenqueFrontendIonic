@@ -14,46 +14,52 @@
 
 <ion-content [fullscreen]="true">
   <div class="ion-padding">
-    <ng-container *ngIf="asistentesParaExperiencia().length > 0; else emptyState">
+    @if (asistentesParaExperiencia().length > 0) {
       <!-- Lista de asistentes -->
       <ion-list>
-        <ion-item *ngFor="let asistente of asistentesParaExperiencia(); let i = index">
-          <ion-label>
-            <h2>{{ i + 1 }}. {{ asistente.nombre }}</h2>
-            <p>
-              <ion-icon name="mail" class="ion-align-items-start"></ion-icon>
-              {{ asistente.correo }}
-            </p>
-            <p>
-              <ion-icon name="calendar" class="ion-align-items-start"></ion-icon>
-              {{ formatFecha(asistente.fechaSolicitud) }}
-            </p>
-          </ion-label>
+        @for (asistente of asistentesParaExperiencia(); track asistente.id) {
+          <ion-item>
+            <ion-label>
+              <h2>{{ asistentesParaExperiencia().indexOf(asistente) + 1 }}. {{ asistente.nombre }}</h2>
+              <p>
+                <ion-icon name="mail" class="ion-align-items-start"></ion-icon>
+                {{ asistente.correo }}
+              </p>
+              <p>
+                <ion-icon name="calendar" class="ion-align-items-start"></ion-icon>
+                {{ formatFecha(asistente.fechaSolicitud) }}
+              </p>
+            </ion-label>
 
-          <div slot="end" class="ion-text-end">
-            <ion-badge [color]="getEstadoColor(asistente.estado)" class="ion-margin-bottom">
-              {{ getEstadoTexto(asistente.estado) }}
-            </ion-badge>
+            <div slot="end" class="ion-text-end">
+              <ion-badge [color]="getEstadoColor(asistente.estado)" class="ion-margin-bottom">
+                {{ getEstadoTexto(asistente.estado) }}
+              </ion-badge>
 
-            <div class="ion-margin-top">
-              <ion-button *ngIf="asistente.estado !== 'aprobada'" 
-                size="small" 
-                color="success" 
-                fill="clear"
-                (click)="confirmarAprobar(asistente)">
-                <ion-icon name="checkmark" slot="icon-only"></ion-icon>
-              </ion-button>
+              <div class="ion-margin-top">
+                @if (asistente.estado !== 'aprobada') {
+                  <ion-button
+                    size="small"
+                    color="success"
+                    fill="clear"
+                    (click)="confirmarAprobar(asistente)">
+                    <ion-icon name="checkmark" slot="icon-only"></ion-icon>
+                  </ion-button>
+                }
 
-              <ion-button *ngIf="asistente.estado !== 'rechazada'" 
-                size="small" 
-                color="danger" 
-                fill="clear"
-                (click)="confirmarRechazar(asistente)">
-                <ion-icon name="close" slot="icon-only"></ion-icon>
-              </ion-button>
+                @if (asistente.estado !== 'rechazada') {
+                  <ion-button
+                    size="small"
+                    color="danger"
+                    fill="clear"
+                    (click)="confirmarRechazar(asistente)">
+                    <ion-icon name="close" slot="icon-only"></ion-icon>
+                  </ion-button>
+                }
+              </div>
             </div>
-          </div>
-        </ion-item>
+          </ion-item>
+        }
       </ion-list>
 
       <!-- Resumen de Asistencia -->
@@ -72,7 +78,7 @@
                 </div>
               </ion-col>
 
-              <ng-container *ngIf="experienciaEditando()">
+              @if (experienciaEditando()) {
                 <ion-col size="12" size-md="4">
                   <div class="stat-card">
                     <div class="stat-number text-success">{{ getAsistentesAprobados(experienciaEditando()!.id).length }}</div>
@@ -86,14 +92,13 @@
                     <div class="stat-label">Pendientes</div>
                   </div>
                 </ion-col>
-              </ng-container>
+              }
             </ion-row>
           </ion-grid>
         </ion-card-content>
       </ion-card>
-    </ng-container>
-
-    <ng-template #emptyState>
+    }
+    @else {
       <ion-card>
         <ion-card-content class="ion-text-center empty-state">
           <h2>😴 No hay asistentes registrados</h2>
@@ -102,7 +107,7 @@
           </p>
         </ion-card-content>
       </ion-card>
-    </ng-template>
+    }
   </div>
 
   <!-- Action Sheet para acciones rápidas -->

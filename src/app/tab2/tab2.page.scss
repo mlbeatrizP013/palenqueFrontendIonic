@@ -1,27 +1,115 @@
 :host {
-  ion-searchbar {
-    margin-bottom: 12px;
-  }
-
-  app-producto-card {
-    display: block;
-    margin-bottom: 12px;
-  }
-}
-
-/* Header + content */
-:host {
+  /* Header styling */
   ion-header ion-toolbar {
     --background: var(--marron-agave);
     color: #fff;
+
+    ion-title {
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #fff;
+    }
   }
 
+  /* Main content area */
   ion-content {
     background: var(--tierra);
+    --background: var(--tierra);
   }
 
+  /* Searchbar styling */
+  ion-searchbar {
+    --background: rgba(255, 255, 255, 0.9);
+    --icon-color: var(--gris-ceniza);
+    --placeholder-color: var(--gris-ceniza);
+    margin-bottom: 16px;
+    border-radius: 8px;
+  }
+
+  /* Segment styling */
+  ion-segment {
+    --background: transparent;
+    margin-bottom: 20px;
+
+    ion-segment-button {
+      --color: var(--gris-ceniza);
+      --color-checked: #fff;
+      --background-checked: var(--verde-agave);
+      --indicator-color: var(--verde-agave);
+      --border-width: 0;
+      font-family: var(--font-body);
+      font-weight: 500;
+      border-radius: 8px;
+      margin: 4px;
+      padding: 8px 12px;
+
+      ion-label {
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  /* Grid layout */
+  ion-grid {
+    padding: 0;
+  }
+
+  ion-col {
+    padding: 8px;
+  }
+
+  /* Product cards */
   app-producto-card, ion-card {
-    background: var(--tierra);
+    background: #fff;
     color: var(--negro-carbon);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 16px;
+  }
+
+  /* FAB button */
+  ion-fab-button {
+    --background: var(--verde-agave);
+    --color: #fff;
+
+    &:hover {
+      --background: darken($color: #3A644D, $amount: 10%);
+    }
+  }
+
+  /* Buttons */
+  ion-button {
+    font-family: var(--font-body);
+    font-weight: 500;
+    text-transform: none;
+    border-radius: 8px;
+
+    &[color="primary"] {
+      --background: var(--verde-agave);
+      --color: #fff;
+    }
+
+    &[color="danger"] {
+      --background: var(--rojo-maguey);
+      --color: #fff;
+    }
+  }
+
+  /* Text utilities */
+  .text-primary {
+    color: var(--verde-agave);
+  }
+
+  .text-danger {
+    color: var(--rojo-maguey);
+  }
+
+  .text-dark {
+    color: var(--negro-carbon);
+  }
+
+  .text-muted {
+    color: var(--gris-ceniza);
   }
 }

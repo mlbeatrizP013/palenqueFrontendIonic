@@ -1,23 +1,41 @@
 .producto-card {
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: #fff;
+  border-radius: 12px;
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 16px rgba(91, 70, 54, 0.15);
   }
 
   ion-card-header {
     padding-bottom: 8px;
+    background: transparent;
 
     .card-header-content {
       display: flex;
       justify-content: flex-end;
+      gap: 8px;
 
       ion-badge {
         font-weight: 600;
         padding: 4px 12px;
         font-size: 12px;
+        font-family: var(--font-body);
+        border-radius: 6px;
+
+        &[color="success"] {
+          --background: var(--verde-agave);
+        }
+
+        &[color="warning"] {
+          --background: #F39C12;
+        }
+
+        &[color="danger"] {
+          --background: var(--rojo-maguey);
+        }
       }
     }
   }
@@ -31,7 +49,7 @@
       margin-bottom: 12px;
       border-radius: 8px;
       overflow: hidden;
-      background: #f0f0f0;
+      background: var(--tierra);
 
       img {
         width: 100%;
@@ -43,57 +61,73 @@
     .product-info {
       h3 {
         margin: 8px 0 4px 0;
-        font-size: 16px;
+        font-size: 18px;
         font-weight: 600;
-        color: #333;
+        color: var(--negro-carbon);
+        font-family: var(--font-heading);
       }
 
       .categoria {
         margin: 0;
         font-size: 12px;
-        color: #999;
+        color: var(--gris-ceniza);
         font-style: italic;
         margin-bottom: 8px;
+        font-family: var(--font-body);
       }
 
       .descripcion {
         margin: 0;
         font-size: 13px;
-        color: #666;
+        color: var(--gris-ceniza);
         line-height: 1.4;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
+        font-family: var(--font-body);
       }
     }
 
     .info-grid {
       margin: 12px 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
 
       .info-item {
         label {
           display: block;
           font-size: 11px;
           font-weight: 600;
-          color: #999;
+          color: var(--gris-ceniza);
           text-transform: uppercase;
           letter-spacing: 0.5px;
           margin-bottom: 4px;
+          font-family: var(--font-body);
         }
 
         p {
           margin: 0;
           font-size: 14px;
           font-weight: 600;
+          font-family: var(--font-body);
 
           &.precio {
-            color: #27ae60;
+            color: var(--verde-agave);
           }
 
           &.stock {
-            color: #3498db;
+            color: var(--cobre);
+          }
+
+          &.stock-bajo {
+            color: #F39C12;
+          }
+
+          &.sin-stock {
+            color: var(--rojo-maguey);
           }
         }
       }
@@ -101,12 +135,33 @@
 
     .actions-grid {
       margin-top: 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
 
       ion-button {
         font-size: 12px;
         font-weight: 600;
         letter-spacing: 0.3px;
         height: 36px;
+        font-family: var(--font-body);
+        border-radius: 6px;
+        text-transform: none;
+
+        &[color="primary"] {
+          --background: var(--verde-agave);
+          --color: #fff;
+        }
+
+        &[color="danger"] {
+          --background: var(--rojo-maguey);
+          --color: #fff;
+        }
+
+        &[color="warning"] {
+          --background: var(--cobre);
+          --color: #fff;
+        }
       }
     }
   }

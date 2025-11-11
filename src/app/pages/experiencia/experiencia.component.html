@@ -1,20 +1,23 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>🎯 Gestión de Experiencias</ion-title>
-    <ion-button *ngIf="currentView() === 'list'" slot="end" (click)="navegarAFormulario()">
-      ➕ Nueva Experiencia
-    </ion-button>
+    @if(currentView() === 'list') {
+      <ion-button slot="end" (click)="navegarAFormulario()">
+        ➕ Nueva Experiencia
+      </ion-button>
+    }
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ng-container *ngIf="currentView() === 'list'">
+  @if (currentView() === 'list') {
     <div class="ion-padding">
-      <ng-container *ngIf="experiencias().length > 0; else noExperiencias">
+      @if(experiencias().length > 0) {
         <ion-grid>
           <ion-row>
-            <ion-col *ngFor="let experiencia of experiencias(); let idx = index" size="12" size-md="6" size-lg="4">
-              <ion-card>
+            @for (experiencia of experiencias(); track experiencia.id) {
+              <ion-col size="12" size-md="6" size-lg="4">
+                <ion-card>
                 <ion-card-header>
                   <ion-card-title>🍸 {{ experiencia.nombre }}</ion-card-title>
                 </ion-card-header>
@@ -85,11 +88,10 @@
                 </ion-card-content>
               </ion-card>
             </ion-col>
+            }
           </ion-row>
         </ion-grid>
-      </ng-container>
-
-      <ng-template #noExperiencias>
+      } @else {
         <div class="empty-state">
           <ion-card>
             <ion-card-content class="ion-text-center">
@@ -103,11 +105,9 @@
             </ion-card-content>
           </ion-card>
         </div>
-      </ng-template>
+      }
     </div>
-  </ng-container>
-
-  <ng-container *ngIf="currentView() === 'form'">
+  } @else if(currentView() === 'form') {
     <div class="ion-padding">
       <ion-card>
         <ion-card-header>
@@ -127,9 +127,11 @@
                 type="text">
               </ion-input>
             </ion-item>
-            <ion-text *ngIf="experienciaForm.get('nombre')?.invalid && experienciaForm.get('nombre')?.touched" color="danger" class="ion-padding-start">
-              <small>Nombre requerido (mín. 3 caracteres)</small>
-            </ion-text>
+            @if(experienciaForm.get('nombre')?.invalid && experienciaForm.get('nombre')?.touched) {
+              <ion-text color="danger" class="ion-padding-start">
+                <small>Nombre requerido (mín. 3 caracteres)</small>
+              </ion-text>
+            }
 
             <!-- Fecha y Hora -->
             <ion-grid>
@@ -191,7 +193,7 @@
         </ion-card-content>
       </ion-card>
     </div>
-  </ng-container>
+  }
 
   <!-- Action Sheet para acciones -->
   <ion-action-sheet
