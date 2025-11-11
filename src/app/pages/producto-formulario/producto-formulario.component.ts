@@ -14,6 +14,7 @@ import {
   IonGrid,
   IonRow,
   IonCol,
+  IonText,
   IonSelect,
   IonSelectOption,
   IonIcon
@@ -42,6 +43,7 @@ import { Producto } from '../../interfaces/productos';
     IonGrid,
     IonRow,
     IonCol,
+    IonText,
     IonSelect,
     IonSelectOption,
     IonIcon
