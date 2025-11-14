@@ -1,0 +1,83 @@
+/* Color principal del fondo de la página */
+ion-content {
+    --background: #96897f;
+}
+
+/* Estilo del Header (Banner) */
+ion-toolbar.header-banner {
+    --background: #2b2b2b; // Fondo oscuro del banner
+    --padding-top: 0;
+    --padding-bottom: 0;
+    --padding-start: 0;
+    --padding-end: 0;
+
+    .header-logo {
+        width: 100%;
+        max-height: 100px; // Ajusta según el tamaño de tu logo
+        object-fit: contain; // 'contain' para que se vea completo
+        /* Group 14 */
+
+        // position: absolute;
+        width: 233px;
+        height: 55.28px;
+        left: calc(50% - 233px/2 + 4.5px);
+        top: 17px;
+
+
+    }
+}
+
+/* Título de la página ("HISTORIA DEL PALENQUE") */
+.page-title {
+    font-weight: bold;
+    text-align: center;
+    color: #453e3b; // Color café oscuro para el título
+    margin-top: 20px;
+    margin-bottom: 25px;
+    font-size: 1.2rem;
+}
+
+/* Contenedor del formulario */
+.form-container {
+    padding: 0 5px;
+}
+
+/* Etiquetas de los campos ("VISIÓN", "MISIÓN") */
+.field-label {
+    color: #5a6136; // Color verde olivo
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-left: 5px;
+    margin-bottom: 8px;
+    display: block; // Para que ocupe su propia línea
+    text-transform: uppercase;
+}
+
+/* Áreas de texto editables */
+ion-textarea {
+    --background: #a38e7c; // Fondo café claro para los campos
+    --color: #ffffff; // Texto que escribe el usuario (blanco)
+    --placeholder-color: #f0f0f0c0; // Texto de placeholder
+
+    border-radius: 8px;
+    margin-bottom: 20px; // Espacio entre cada campo
+    --padding-start: 12px;
+    --padding-end: 12px;
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+    min-height: 120px; // Altura mínima
+    font-size: 0.95rem;
+}
+
+/* Botón de Guardar Cambios */
+.save-button {
+    --background: #5a6136; // Verde olivo, igual que las etiquetas
+    --color: #ffffff;
+    --border-radius: 8px;
+    --box-shadow: none; // Diseño plano
+
+    font-weight: bold;
+    margin-top: 15px;
+    height: 48px;
+    font-size: 1rem;
+}
