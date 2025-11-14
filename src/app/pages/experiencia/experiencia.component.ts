@@ -21,10 +21,12 @@ import {
   IonActionSheet,
   IonAlert,
   IonIcon,
-  IonText
+  IonText,
+  IonFab,
+  IonFabButton
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { create, trash, people, arrowBack, time, calendar, ellipsisVertical } from 'ionicons/icons';
+import { create, trash, people, arrowBack, time, calendar, ellipsisVertical, add, save } from 'ionicons/icons';
 import { Asistente, Experiencia } from '../../interfaces/tipos';
 
 @Component({
@@ -54,7 +56,9 @@ import { Asistente, Experiencia } from '../../interfaces/tipos';
     IonActionSheet,
     IonAlert,
     IonIcon,
-    IonText
+    IonText,
+    IonFab,
+    IonFabButton
   ]
 })
 export class ExperienciaComponent {
@@ -80,7 +84,7 @@ export class ExperienciaComponent {
   });
 
   constructor() {
-    addIcons({ create, trash, people, arrowBack, time, calendar, ellipsisVertical });
+    addIcons({add,calendar,arrowBack,save,create,trash,people,time,ellipsisVertical});
   }
 
   // Computed properties

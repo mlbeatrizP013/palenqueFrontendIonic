@@ -20,7 +20,7 @@ import {
   IonIcon
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { close, checkmark, images } from 'ionicons/icons';
+import { close, checkmark, images, arrowBack, save } from 'ionicons/icons';
 import { Producto } from '../../interfaces/productos';
 
 @Component({
@@ -69,7 +69,7 @@ export class ProductoFormularioComponent {
   categorias = ['Tequila', 'Mezcal', 'Raicilla', 'Bacanora', 'Pulque'];
 
   constructor() {
-    addIcons({ close, checkmark, images });
+    addIcons({ close, checkmark, images, arrowBack, save });
   }
 
   ngOnInit() {
@@ -79,9 +79,9 @@ export class ProductoFormularioComponent {
         nombre: producto.nombre,
         categoria: producto.categoria,
         descripcion: producto.descripcion,
-          precioMXN: producto.precioMXN.toString(),
-          stockInicial: producto.stockInicial.toString(),
-          stockMinimo: producto.stockMinimo.toString(),
+        precioMXN: producto.precioMXN.toString(),
+        stockInicial: producto.stockInicial.toString(),
+        stockMinimo: producto.stockMinimo.toString(),
         imagen: producto.imagen
       });
     }
@@ -99,7 +99,7 @@ export class ProductoFormularioComponent {
         stockActual: parseInt(formValue.stockInicial as any),
         stockMinimo: parseInt(formValue.stockMinimo as any),
         imagen: formValue.imagen!,
-          estado: 'activo'
+        estado: 'activo'
       });
       this.productoForm.reset();
     }
@@ -110,3 +110,4 @@ export class ProductoFormularioComponent {
     this.productoForm.reset();
   }
 }
+

@@ -18,13 +18,15 @@ import {
   IonCol, 
   IonBadge,
   IonIcon,
+  IonFab,
+  IonFabButton,
   IonList,
   IonAlert,
   IonActionSheet,
   IonButtons
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowBack, person, mail, calendar, checkmark, close, people } from 'ionicons/icons';
+import { arrowBack, person, mail, calendar, checkmark, close, people, add } from 'ionicons/icons';
 
 import { Asistente, Experiencia } from '../../interfaces/tipos';
 
@@ -54,6 +56,8 @@ import { Asistente, Experiencia } from '../../interfaces/tipos';
     IonAlert,
     IonBadge, 
     IonIcon,
+    IonFab,
+    IonFabButton,
     IonList,
     IonButtons
   ],
@@ -96,7 +100,7 @@ export class AsistenciaComponent {
   volverGestion = output<void>();
 
   constructor() {
-    addIcons({ arrowBack, person, mail, calendar, checkmark, close, people });
+    addIcons({arrowBack,mail,calendar,checkmark,close,add,person,people});
   }
 
   // Métodos del componente

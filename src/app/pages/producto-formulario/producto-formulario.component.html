@@ -127,27 +127,26 @@
       }
 
       <!-- Botones -->
-      <ion-grid>
+      <ion-grid class="ion-margin-top">
         <ion-row>
-          <ion-col size="6">
+          <ion-col>
             <ion-button
               expand="block"
-              color="danger"
+              color="medium"
               (click)="onCancelar()"
             >
-              <ion-icon slot="start" name="close"></ion-icon>
               Cancelar
             </ion-button>
           </ion-col>
-          <ion-col size="6">
+          <ion-col>
             <ion-button
               expand="block"
-              color="success"
-              [disabled]="!productoForm.valid"
+              color="primary"
               (click)="guardar()"
+              [disabled]="productoForm.invalid"
             >
-              <ion-icon slot="start" name="checkmark"></ion-icon>
-              Guardar
+              <ion-icon slot="start" name="save"></ion-icon>
+              {{ productoEditando() ? 'Actualizar' : 'Guardar' }}
             </ion-button>
           </ion-col>
         </ion-row>

@@ -1,15 +1,18 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>🎯 Gestión de Experiencias</ion-title>
-    @if(currentView() === 'list') {
-      <ion-button slot="end" (click)="navegarAFormulario()">
-        ➕ Nueva Experiencia
-      </ion-button>
-    }
+    <ion-title class="header-title">Gestión de Experiencias</ion-title>
   </ion-toolbar>
+  
 </ion-header>
-
+ 
 <ion-content [fullscreen]="true">
+  @if (currentView() === 'list') {
+    <ion-fab class="fab-bottom-right fab-standard" vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button (click)="navegarAFormulario()" aria-label="Nueva experiencia">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  }
   @if (currentView() === 'list') {
     <div class="ion-padding">
       @if(experiencias().length > 0) {
@@ -19,15 +22,15 @@
               <ion-col size="12" size-md="6" size-lg="4">
                 <ion-card>
                 <ion-card-header>
-                  <ion-card-title>🍸 {{ experiencia.nombre }}</ion-card-title>
+                  <ion-card-title> {{ experiencia.nombre }}</ion-card-title>
                 </ion-card-header>
 
                 <ion-card-content>
                   <ion-item lines="none">
                     <ion-icon name="calendar" slot="start"></ion-icon>
                     <ion-label>
-                      <p>📅 {{ experiencia.fecha }}</p>
-                      <p>⏰ {{ experiencia.hora }}</p>
+                      <p> {{ experiencia.fecha }}</p>
+                      <p> {{ experiencia.hora }}</p>
                     </ion-label>
                   </ion-item>
 
@@ -62,7 +65,7 @@
                           color="warning" 
                           size="small"
                           (click)="navegarAEdicion(experiencia.id)">
-                          ✏️ Editar
+                           Editar
                         </ion-button>
                       </ion-col>
                       <ion-col>
@@ -71,7 +74,7 @@
                           color="primary" 
                           size="small"
                           (click)="verAsistentesDeExperiencia(experiencia.id)">
-                          👥 Asistentes
+                           Asistentes
                         </ion-button>
                       </ion-col>
                       <ion-col>
@@ -80,7 +83,7 @@
                           color="danger" 
                           size="small"
                           (click)="confirmarEliminar(experiencia.id)">
-                          🗑️ Eliminar
+                           Eliminar
                         </ion-button>
                       </ion-col>
                     </ion-row>
@@ -175,7 +178,7 @@
                     expand="block" 
                     color="medium" 
                     (click)="navegarALista()">
-                    ↩️ Cancelar
+                    Cancelar
                   </ion-button>
                 </ion-col>
                 <ion-col>
@@ -184,7 +187,8 @@
                     color="primary" 
                     (click)="guardar()"
                     [disabled]="experienciaForm.invalid">
-                    💾 {{ isEditMode() ? 'Actualizar' : 'Guardar' }}
+                    <ion-icon slot="start" name="save"></ion-icon>
+                    {{ isEditMode() ? 'Actualizar' : 'Guardar' }}
                   </ion-button>
                 </ion-col>
               </ion-row>
