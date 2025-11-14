@@ -43,6 +43,7 @@ export class Tab3Page {
   maestro: string = "Introduce el nombre del maestro"; 
   mision: string = "Describe la misión y valores";
   normas: string = "Describe las normas de producción"; 
+  valores: string = "Describe las normas de producción"; 
 
   constructor() {}
 
@@ -51,6 +52,7 @@ export class Tab3Page {
     console.log('Maestro Mezcalero:', this.maestro);
     console.log('Misión:', this.mision);
     console.log('Normas:', this.normas);
+    console.log('valores:', this.normas);
     // Aquí iría tu lógica para guardar los datos en tu backend
   }
   }
