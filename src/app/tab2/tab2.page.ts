@@ -28,6 +28,9 @@ import { ProductoCardComponent } from '../pages/producto-card/producto-card.comp
 import { Producto } from '../interfaces/productos';
 import { productosIniciales } from '../data/data-inicial';
 
+import { HeaderComponent } from 'src/app/components/header/header.component';
+
+
 @Component({
   selector: 'app-tab2',
   templateUrl: './tab2.page.html',
@@ -35,9 +38,7 @@ import { productosIniciales } from '../data/data-inicial';
   standalone: true,
   imports: [
     CommonModule,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
+    
     IonContent,
     IonFab,
     IonFabButton,
@@ -55,7 +56,8 @@ import { productosIniciales } from '../data/data-inicial';
     IonCardTitle,
     IonCardContent,
     ProductoFormularioComponent,
-    ProductoCardComponent
+    ProductoCardComponent,
+    HeaderComponent
   ]
 })
 export class Tab2Page {

@@ -1,0 +1,217 @@
+
+ion-content {
+  --background: #f0f2f5; 
+}
+
+/* ----------------------------------------------------- */
+/* --- SECCIÓN DEL BANNER SUPERIOR (IMAGEN Y TEXTO) --- */
+/* ----------------------------------------------------- */
+
+.banner-container {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.banner-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.banner-scrim {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.8) 100%);
+  z-index: 2;
+}
+
+.edit-button {
+  --background: #5a6136; // Verde olivo
+  --color: #ffffff;
+  --padding-start: 10px;
+  --padding-end: 10px;
+  --box-shadow: none;
+  --border-radius: 6px; // Cuadrado redondeado
+
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 3;
+  height: 30px;
+  font-size: 0.85rem;
+  text-transform: none;
+  font-weight: 500;
+}
+
+.banner-content {
+  position: relative;
+  z-index: 3;
+  padding: 10px 16px 16px 16px; 
+  color: #ffffff;
+}
+
+.banner-main-title {
+  font-size: 1.5rem; 
+  font-weight: bold;
+  margin: 0 0 6px 0; 
+  color:#ffffff;
+}
+
+.banner-description {
+  font-size: 0.8rem; 
+  margin: 0;
+  opacity: 0.9;
+  line-height: 1.3;
+}
+
+/* ----------------------------------------------------- */
+/* --- ÁREA DE CONTENIDO BLANCA CON TARJETAS Y FORM --- */
+/* ----------------------------------------------------- */
+
+.form-area {
+  background: #ffffff;
+  margin-top: -20px;
+  position: relative;
+  z-index: 4;
+  padding: 20px 16px 30px 16px;
+}
+
+.info-cards-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 12px;
+  margin-bottom: 25px; 
+  padding-bottom: 5px; 
+  
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none; 
+}
+
+.info-card {
+  flex: 0 0 150px; 
+  background: #f0ebe5;
+  border-radius: 12px;
+  padding: 15px;
+  text-align: left;
+  min-height: 100px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; 
+
+  h3 {
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: #453e3b;
+    margin: 0 0 5px 0;
+  }
+
+  p {
+    font-size: 0.75rem;
+    color: #6d6d6d;
+    margin: 0;
+    line-height: 1.3;
+    
+    ion-icon {
+      font-size: 0.9rem;
+      color: #5a6136;
+      margin-right: 4px;
+    }
+    span {
+      font-weight: bold;
+      color: #453e3b;
+      margin-right: 8px;
+    }
+  }
+}
+
+
+/* ----------------------------------------------------- */
+/* --- ESTILOS DEL FORMULARIO PRINCIPAL --- */
+/* ----------------------------------------------------- */
+
+.field-label {
+  color: #453e3b; 
+  font-weight: 600; 
+  font-size: 0.9rem;
+  margin-left: 5px;
+  margin-bottom: 8px; 
+  display: block;
+  text-transform: none; 
+}
+
+.form-item {
+  --background: #f0ebe5;
+  --padding-start: 12px; 
+  --padding-end: 12px;
+  --min-height: 50px; 
+
+  border-radius: 10px; 
+  margin-bottom: 18px; 
+
+  ion-textarea {
+    --padding-top: 10px; 
+    --padding-bottom: 10px;
+    --padding-start: 0;
+    --padding-end: 0;
+    --color: #333;
+    font-size: 0.9rem; 
+    
+    &::placeholder {
+      color: #a0a0a0;
+    }
+  }
+}
+
+.item-badge {
+  background: #d9d3c9;
+  color: #453e3b;
+  font-weight: bold;
+  font-size: 0.8rem; 
+  border-radius: 50%;
+  width: 24px; 
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px; 
+}
+
+.item-extra-info {
+  display: flex;
+  align-items: center;
+  gap: 8px; 
+
+  .info-text {
+    color: #453e3b;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+}
+
+.save-button {
+  --background: #5a6136; 
+  --color: #ffffff;
+  --border-radius: 12px;
+  --box-shadow: none;
+
+  font-weight: bold;
+  margin-top: 25px;
+  height: 52px; 
+  font-size: 1.05rem; 
+  text-transform: uppercase;
+}

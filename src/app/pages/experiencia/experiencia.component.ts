@@ -26,7 +26,7 @@ import {
   IonFabButton
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { create, trash, people, arrowBack, time, calendar, ellipsisVertical, add, save } from 'ionicons/icons';
+import { create, trash, people, arrowBack, time, calendar, ellipsisVertical } from 'ionicons/icons';
 import { Asistente, Experiencia } from '../../interfaces/tipos';
 
 @Component({
@@ -84,7 +84,7 @@ export class ExperienciaComponent {
   });
 
   constructor() {
-    addIcons({add,calendar,arrowBack,save,create,trash,people,time,ellipsisVertical});
+    addIcons({ create, trash, people, arrowBack, time, calendar, ellipsisVertical });
   }
 
   // Computed properties

@@ -7,6 +7,8 @@ import { CommonModule } from '@angular/common';
 import { Asistente, Experiencia } from '../interfaces/tipos';
 import { experienciasIniciales, asistentesIniciales } from '../data/data-inicial';
 
+import { HeaderComponent } from 'src/app/components/header/header.component';
+
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -14,12 +16,11 @@ import { experienciasIniciales, asistentesIniciales } from '../data/data-inicial
   standalone: true,
   imports: [
     CommonModule,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
+    
     IonContent,
     ExperienciaComponent,
-    AsistenciaComponent
+    AsistenciaComponent,
+    HeaderComponent
   ],
 })
 export class Tab1Page {
