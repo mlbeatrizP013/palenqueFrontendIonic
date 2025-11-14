@@ -36,6 +36,10 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
 
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+:root {
+  --ion-font-family: 'Montserrat', sans-serif;
+}
 /* App-wide typography and colors */
 html, body, app-root {
 	height: 100%;
