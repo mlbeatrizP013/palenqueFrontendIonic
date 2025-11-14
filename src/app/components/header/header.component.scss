@@ -1,0 +1,18 @@
+ion-toolbar.header-banner {
+    --background: #2b2b2b;
+    height: 90px;
+    position: relative;
+}
+
+
+.header-logo {
+
+    position: absolute;
+    top: 23%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 233px;
+    height: 55.28px;
+    object-fit: contain;
+}
