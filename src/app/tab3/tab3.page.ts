@@ -1,58 +1,81 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms'; 
 import {
   IonContent,
-  IonTextarea,
-  IonLabel,
-  IonButton,
   IonImg,
-  IonInput,
-  IonItem, // Para los campos del formulario
-  IonIcon
+  IonButton,
+  IonIcon,
+  IonLabel,
+  IonItem,
+  IonTextarea,
 } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { flaskOutline, leafOutline } from 'ionicons/icons';
 
-import { HeaderComponent } from 'src/app/components/header/header.component';
+// 1. IMPORTA TU HEADER COMPONENT
+// Asegúrate que la ruta sea correcta.
+import { HeaderComponent } from '../components/header/header.component';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'app-tab3',
+  selector: 'app-tab3', 
   templateUrl: 'tab3.page.html',
   styleUrls: ['tab3.page.scss'],
   standalone: true,
   imports: [
-   
-    HeaderComponent,
-
+    FormsModule,    
     IonContent,
-    CommonModule,
-    FormsModule,
-    IonTextarea,
-    IonLabel,
-    IonButton,
     IonImg,
+    IonButton,
+    IonIcon,
+    IonLabel,
     IonItem,
-    IonInput,
-    IonItem, 
-    IonIcon
-
+    IonTextarea,
+    HeaderComponent, 
   ],
 })
-export class Tab3Page {
-  // Propiedades para enlazar los datos del formulario
-  vision: string = "Describe la visión de la empresa"; 
-  maestro: string = "Introduce el nombre del maestro"; 
-  mision: string = "Describe la misión y valores";
-  normas: string = "Describe las normas de producción"; 
-  valores: string = "Describe las normas de producción"; 
+export class Tab3Page { 
+  isEditing = false;
 
-  constructor() {}
+  vision = 'Lorem ipsum dolor sit amet...';
+  maestro = 'Nombre del Maestro';
+  mision = 'Lorem ipsum dolor sit amet...';
+  valores = 'Lorem ipsum dolor sit amet...';
+  normas = 'Descripción de las normas...';
+  informacion = 'Información del lugar y ubicación...';
 
-  guardarCambios() {
-    console.log('Visión:', this.vision);
-    console.log('Maestro Mezcalero:', this.maestro);
-    console.log('Misión:', this.mision);
-    console.log('Normas:', this.normas);
-    console.log('valores:', this.normas);
-    // Aquí iría tu lógica para guardar los datos en tu backend
+ constructor(private http: HttpClient) {
+    addIcons({ flaskOutline, leafOutline });
+
+    // PRUEBA DE CONEXIÓN EN CONSOLA
+    console.log(
+      '--- Intentando conectar con http://localhost:3000/info-home/findAll ---'
+    );
+
+    this.http.get('http://localhost:3000/info-home/findAll').subscribe({
+      next: (res) => {
+        console.log('✅ CONEXIÓN EXITOSA (info-home):', res);
+      },
+      error: (err) => {
+        console.error('❌ ERROR DE CONEXIÓN (info-home):', err);
+      },
+    });
   }
+
+  toggleEditMode(): void {
+    this.isEditing = true;
   }
+
+  guardarCambios(): void {
+    this.isEditing = false;
+    
+    console.log('Datos guardados:', {
+      vision: this.vision,
+      maestro: this.maestro,
+      mision: this.mision,
+      valores: this.valores,
+      normas: this.normas,
+      informacion: this.informacion,
+    });
+  }
+}
