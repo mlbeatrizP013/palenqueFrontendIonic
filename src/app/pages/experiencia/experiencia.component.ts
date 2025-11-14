@@ -26,6 +26,7 @@ import {
 import { addIcons } from 'ionicons';
 import { create, trash, people, arrowBack, time, calendar, ellipsisVertical } from 'ionicons/icons';
 import { Asistente, Experiencia } from '../../interfaces/tipos';
+import { ServiceAPI } from 'src/app/services/service-api';
 
 @Component({
   selector: 'app-experiencia',
@@ -59,6 +60,7 @@ import { Asistente, Experiencia } from '../../interfaces/tipos';
 })
 export class ExperienciaComponent {
   private fb = inject(FormBuilder);
+   private api = inject(ServiceAPI);
 
   // Input signals
   experiencias = input.required<Experiencia[]>();
@@ -81,6 +83,14 @@ export class ExperienciaComponent {
 
   constructor() {
     addIcons({ create, trash, people, arrowBack, time, calendar, ellipsisVertical });
+    this.api.findAll().subscribe({
+      next: (res) => {
+        console.log('✅ Datos recibidos de la API:', res);
+      },
+      error: (err) => {
+        console.error('❌ Error al obtener datos:', err);
+      }
+    });
   }
 
   // Computed properties
