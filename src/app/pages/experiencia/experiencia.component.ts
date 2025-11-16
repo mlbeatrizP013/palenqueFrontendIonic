@@ -28,6 +28,7 @@ import {
 import { addIcons } from 'ionicons';
 import { add, create, trash, people, arrowBack, time, calendar, ellipsisVertical } from 'ionicons/icons';
 import { Asistente, Experiencia } from '../../interfaces/tipos';
+import { ServiceAPI } from 'src/app/services/service-api';
 
 @Component({
   selector: 'app-experiencia',
@@ -63,10 +64,13 @@ import { Asistente, Experiencia } from '../../interfaces/tipos';
 })
 export class ExperienciaComponent {
   private fb = inject(FormBuilder);
+  private api = inject(ServiceAPI);
+  private apiUsuario = inject(ServiceAPI);
 
   // Input signals
   experiencias = input.required<Experiencia[]>();
   asistentes = input.required<Asistente[]>();
+  listaCatas = signal<any[]>([]);
 
   // Estado del componente
   currentView = signal<'list' | 'form'>('list');
@@ -85,6 +89,17 @@ export class ExperienciaComponent {
 
   constructor() {
     addIcons({ add, create, trash, people, arrowBack, time, calendar, ellipsisVertical });
+        this.api.findAll().subscribe({
+      next: (res) => {
+        console.log('Datos recibidos:', res);
+        this.listaCatas.set(res);   
+      },
+      error: (err) => console.error('Error al obtener datos:', err)
+    });
+    this.apiUsuario.getUsuarios().subscribe({
+      next: (res) => console.log('✅ Usuarios recibidos:', res),
+      error: (err) => console.error('❌ Error al obtener usuarios:', err),
+    });
   }
 
   // Computed properties

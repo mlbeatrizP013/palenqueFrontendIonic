@@ -8,11 +8,15 @@ import { Observable } from 'rxjs';
 export class ServiceAPI {
 
   private baseUrl = 'http://localhost:3000/diaCata'; 
+  private urlUsuario = 'http://localhost:3000/usuario';
 
   constructor(private http: HttpClient) {}
 
   // Método para obtener todos los registros
   findAll(): Observable<any> {
     return this.http.get(`${this.baseUrl}/findAll`);
+  }
+  getUsuarios(): Observable<any> {
+    return this.http.get(this.urlUsuario);
   }
 }

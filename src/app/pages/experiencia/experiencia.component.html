@@ -15,43 +15,42 @@
   }
   @if (currentView() === 'list') {
     <div class="ion-padding">
-      @if(experiencias().length > 0) {
+      @if(listaCatas().length > 0) {
         <ion-grid>
           <ion-row>
-            @for (experiencia of experiencias(); track experiencia.id) {
+            @for (experiencia of listaCatas(); track experiencia.id) {
               <ion-col size="12" size-md="6" size-lg="4">
                 <ion-card>
                 <ion-card-header>
-                  <ion-card-title> {{ experiencia.nombre }}</ion-card-title>
+                  <ion-card-title> {{ experiencia.name }}</ion-card-title>
                 </ion-card-header>
 
                 <ion-card-content>
                   <ion-item lines="none">
                     <ion-icon name="calendar" slot="start"></ion-icon>
                     <ion-label>
-                      <p> {{ experiencia.fecha }}</p>
-                      <p> {{ experiencia.hora }}</p>
+                      <p> {{ experiencia.fecha | date:'short' }}</p>
                     </ion-label>
                   </ion-item>
 
-                  <p class="descripcion">{{ experiencia.descripcion }}</p>
+                  <p class="descripcion">{{ experiencia.description }}</p>
 
                   <ion-grid class="stats-grid">
                     <ion-row>
                       <ion-col>
                         <div class="stat-item">
                           <strong class="stat-number text-pink">
-                            {{ getAsistentesPorExperiencia(experiencia.id).length }}
+                            {{ experiencia.capacidad }}
                           </strong>
-                          <span class="stat-label">Total Asistentes</span>
+                          <span class="stat-label">Capacidad</span>
                         </div>
                       </ion-col>
                       <ion-col>
                         <div class="stat-item">
                           <strong class="stat-number text-green">
-                            {{ getAsistentesAprobados(experiencia.id).length }}
+                            ${{ experiencia.costo }}
                           </strong>
-                          <span class="stat-label">Aprobados</span>
+                          <span class="stat-label">Costo</span>
                         </div>
                       </ion-col>
                     </ion-row>
