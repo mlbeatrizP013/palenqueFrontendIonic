@@ -169,6 +169,24 @@
               </ion-textarea>
             </ion-item>
 
+            <!-- Capacidad y Costo -->
+            <ion-grid>
+              <ion-row>
+                <ion-col size="12" size-md="6">
+                  <ion-item>
+                    <ion-label position="stacked">👥 Capacidad *</ion-label>
+                    <ion-input formControlName="capacidad" type="number" placeholder="20"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="12" size-md="6">
+                  <ion-item>
+                    <ion-label position="stacked">💲 Costo *</ion-label>
+                    <ion-input formControlName="costo" type="number" placeholder="250"></ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
             <!-- Acciones del Formulario -->
             <ion-grid class="ion-margin-top">
               <ion-row>
@@ -213,5 +231,14 @@
     message="¿Estás seguro de que quieres eliminar esta experiencia?"
     [buttons]="alertButtons"
     (didDismiss)="isDeleteAlertOpen.set(false)">
+  </ion-alert>
+
+  <!-- Alert para resultado de operaciones -->
+  <ion-alert
+    [isOpen]="resultAlertOpen()"
+    [header]="resultAlertHeader()"
+    [message]="resultAlertMessage()"
+    [buttons]="resultAlertButtons"
+    (didDismiss)="onResultAlertDismiss()">
   </ion-alert>
 </ion-content>

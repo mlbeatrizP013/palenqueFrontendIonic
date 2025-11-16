@@ -84,8 +84,17 @@ export class ExperienciaComponent {
     nombre: ['', [Validators.required, Validators.minLength(3)]],
     fecha: ['', Validators.required],
     hora: ['', Validators.required],
-    descripcion: ['']
+    descripcion: [''],
+    capacidad: [null, [Validators.required]],
+    costo: [null, [Validators.required]]
   });
+
+  // Alerts / feedback
+  resultAlertOpen = signal(false);
+  resultAlertHeader = signal('');
+  resultAlertMessage = signal('');
+  lastOperationSuccess = signal(false);
+  resultAlertButtons = [ { text: 'OK', role: 'cancel' } ];
 
   constructor() {
     addIcons({ add, create, trash, people, arrowBack, time, calendar, ellipsisVertical });
@@ -133,10 +142,12 @@ export class ExperienciaComponent {
     const exp = this.experiencias().find(e => e.id === id);
     if (exp) {
       this.experienciaForm.patchValue({
-        nombre: exp.nombre,
-        fecha: exp.fecha,
-        hora: exp.hora,
-        descripcion: exp.descripcion
+        nombre: (exp as any).nombre ?? (exp as any).name,
+        fecha: (exp as any).fecha ?? (exp as any).date,
+        hora: (exp as any).hora ?? (exp as any).time,
+        descripcion: (exp as any).descripcion ?? (exp as any).description,
+        capacidad: (exp as any).capacidad ?? (exp as any).capacity ?? null,
+        costo: (exp as any).costo ?? (exp as any).cost ?? null
       });
       this.selectedExperienciaId.set(id);
       this.currentView.set('form');
@@ -156,15 +167,80 @@ export class ExperienciaComponent {
   guardar(): void {
     if (!this.experienciaForm.valid) return;
 
-    const formValue = this.experienciaForm.value as Omit<Experiencia, 'id' | 'creadoEn'>;
+    const formValue = this.experienciaForm.value as any;
 
-    if (this.isEditMode()) {
-      this.guardarExperiencia.emit({ experiencia: formValue, id: this.selectedExperienciaId()! });
-    } else {
-      this.guardarExperiencia.emit({ experiencia: formValue });
+    // Mapear campos del formulario al formato que espera la API
+    // Construir fecha ISO si se proporcionó fecha y hora
+    let fechaISO: string | null = null;
+    try {
+      if (formValue.fecha && formValue.hora) {
+        fechaISO = new Date(`${formValue.fecha}T${formValue.hora}`).toISOString();
+      } else if (formValue.fecha) {
+        fechaISO = new Date(formValue.fecha).toISOString();
+      }
+    } catch (e) {
+      fechaISO = formValue.fecha ?? null;
     }
 
-    this.navegarALista();
+    const payload: any = {
+      name: formValue.nombre ?? formValue.name,
+      description: formValue.descripcion ?? formValue.description,
+      fecha: fechaISO,
+      capacidad: Number(formValue.capacidad) ?? null,
+      costo: Number(formValue.costo) ?? null,
+      estado: true
+    };
+
+    if (this.isEditMode()) {
+      // Actualizar en la API usando PATCH
+      const id = this.selectedExperienciaId()!;
+      this.api.patchExperiencia(id, payload).subscribe({
+        next: (res) => {
+          console.log('Experiencia actualizada:', res);
+          // Reemplazar en la lista local
+          this.listaCatas.update(list => list.map((item: any) => item.id === id ? res : item));
+          this.resultAlertHeader.set('Éxito');
+          this.resultAlertMessage.set('Experiencia actualizada correctamente');
+          this.lastOperationSuccess.set(true);
+          this.resultAlertOpen.set(true);
+        },
+        error: (err) => {
+          console.error('Error al actualizar experiencia:', err);
+          this.resultAlertHeader.set('Error');
+          this.resultAlertMessage.set(err?.message ?? 'No se pudo actualizar la experiencia');
+          this.lastOperationSuccess.set(false);
+          this.resultAlertOpen.set(true);
+        }
+      });
+    } else {
+      // Crear nueva experiencia usando la API
+      this.api.postExperiencia(payload).subscribe({
+        next: (res) => {
+          console.log('Experiencia creada:', res);
+          // Añadir la nueva experiencia al principio de la lista local
+          this.listaCatas.update(list => [res, ...list]);
+          // Mostrar alerta de éxito y navegar al cerrar
+          this.resultAlertHeader.set('Éxito');
+          this.resultAlertMessage.set('Experiencia creada correctamente');
+          this.lastOperationSuccess.set(true);
+          this.resultAlertOpen.set(true);
+        },
+        error: (err) => {
+          console.error('Error al crear experiencia:', err);
+          this.resultAlertHeader.set('Error');
+          this.resultAlertMessage.set(err?.message ?? 'No se pudo crear la experiencia');
+          this.lastOperationSuccess.set(false);
+          this.resultAlertOpen.set(true);
+        }
+      });
+    }
+  }
+
+  onResultAlertDismiss(): void {
+    this.resultAlertOpen.set(false);
+    if (this.lastOperationSuccess()) {
+      this.navegarALista();
+    }
   }
 
   confirmarEliminar(id: number): void {
