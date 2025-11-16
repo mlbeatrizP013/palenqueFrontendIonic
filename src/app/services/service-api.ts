@@ -18,6 +18,7 @@ export class ServiceAPI {
   findAll(): Observable<any> {
     return this.http.get(`${this.baseUrl}/findAll`);
   }
+  // Metodo para obtener toda la info home
   findAllInfoHome(): Observable<any> {
     return this.http.get(`${this.urlInfoHome}/findAll`);
   }
