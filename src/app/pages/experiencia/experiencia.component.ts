@@ -144,8 +144,33 @@ export class ExperienciaComponent {
 
   navegarAEdicion(id: number): void {
     // Obtener la experiencia desde la API antes de abrir el formulario de edición
+    console.log('navegarAEdicion called for id=', id);
     this.api.getExperienciaById(id).subscribe({
-      next: (exp: any) => {
+      next: (res: any) => {
+        console.log('navegarAEdicion: respuesta recibida', res);
+        let exp = res;
+        // Si la API devuelve un array, tomar el primer elemento
+        if (Array.isArray(res)) {
+          exp = res.length > 0 ? res[0] : null;
+        }
+
+        if (!exp) {
+          console.warn('navegarAEdicion: no se encontró la experiencia en la respuesta', res);
+          // Intentar fallback local desde listaCatas
+          const local = this.listaCatas().find((it: any) => it && it.id === id) || null;
+          if (local) {
+            console.log('navegarAEdicion: usando fallback local desde listaCatas()', local);
+            exp = local;
+          } else {
+            this.resultAlertHeader.set('No encontrado');
+            this.resultAlertMessage.set('No se encontró la experiencia para editar.');
+            this.lastOperationSuccess.set(false);
+            this.resultAlertOpen.set(true);
+            return;
+          }
+        }
+
+        console.log('navegarAEdicion: experiencia recibida', exp);
         // Mapear respuesta al formulario (tolerante a nombres distintos)
         this.experienciaForm.patchValue({
           nombre: exp.nombre ?? exp.name ?? '',
@@ -155,6 +180,7 @@ export class ExperienciaComponent {
           capacidad: exp.capacidad ?? exp.capacity ?? null,
           costo: exp.costo ?? exp.cost ?? null
         });
+        console.log('navegarAEdicion: form patched with', this.experienciaForm.value);
         this.selectedExperienciaId.set(id);
         this.currentView.set('form');
       },

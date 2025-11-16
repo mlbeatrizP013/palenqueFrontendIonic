@@ -52,7 +52,28 @@ export class ServiceAPI {
   }
   // Método para actualizar una experiencia por ID
   patchExperiencia(id: number, data: any): Observable<any> {
-    return this.http.patch(`${this.baseUrl}/update/${id}`, data);
+    // Intentamos el endpoint más probable y, si devuelve 404, probamos alternativas.
+    return this.http.patch(`${this.baseUrl}/update/${id}`, data).pipe(
+      catchError((err) => {
+        console.warn('patchExperiencia: primary endpoint failed', err?.status);
+        if (err?.status === 404) {
+          // Fallback 1: PATCH /diaCata/{id}
+          return this.http.patch(`${this.baseUrl}/${id}`, data).pipe(
+            catchError((err2) => {
+              console.warn('patchExperiencia: fallback 1 failed', err2?.status);
+              // Fallback 2: PATCH /diaCata/update (id en body)
+              return this.http.patch(`${this.baseUrl}/update`, { id, ...data }).pipe(
+                catchError((err3) => {
+                  console.error('patchExperiencia: all attempts failed');
+                  return throwError(() => err3);
+                })
+              );
+            })
+          );
+        }
+        return throwError(() => err);
+      })
+    );
   }
   postExperiencia(data: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/create`, data);
