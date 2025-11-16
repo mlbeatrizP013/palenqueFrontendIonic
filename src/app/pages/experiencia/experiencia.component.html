@@ -241,4 +241,52 @@
     [buttons]="resultAlertButtons"
     (didDismiss)="onResultAlertDismiss()">
   </ion-alert>
+
+  @if (currentView() === 'attendees') {
+    <div class="ion-padding">
+      <ion-button color="medium" fill="clear" (click)="navegarALista()">← Volver</ion-button>
+      <h2 class="ion-margin-top">👥 Asistentes</h2>
+
+      @if(isLoadingAsistentes()) {
+        <p>Cargando asistentes...</p>
+      } @else {
+        @if(asistentesList().length === 0) {
+          <ion-card>
+            <ion-card-content class="ion-text-center">
+              <h3>No hay visitantes registrados para esta experiencia.</h3>
+            </ion-card-content>
+          </ion-card>
+        } @else {
+          <ion-grid>
+            <ion-row>
+              @for (v of asistentesList(); track v.id) {
+                <ion-col size="12" size-md="6">
+                  <ion-card>
+                    <ion-card-header>
+                      <ion-card-title>{{ v.nome ?? v.name ?? v.email }}</ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content>
+                      <p><strong>Email:</strong> {{ v.email }}</p>
+                      <p><strong>Tel:</strong> {{ v.telefono ?? v.phone ?? '-' }}</p>
+                      <p><strong>Estado:</strong> {{ v.status === 1 ? 'Aprobado' : 'Pendiente' }}</p>
+                      <ion-grid>
+                        <ion-row>
+                          <ion-col>
+                            <ion-button expand="block" color="success" (click)="cambiarEstadoVisitante(v.id, 1)" [disabled]="v.__updating">Aprobar</ion-button>
+                          </ion-col>
+                          <ion-col>
+                            <ion-button expand="block" color="danger" (click)="cambiarEstadoVisitante(v.id, 0)" [disabled]="v.__updating">Revocar</ion-button>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </ion-card-content>
+                  </ion-card>
+                </ion-col>
+              }
+            </ion-row>
+          </ion-grid>
+        }
+      }
+    </div>
+  }
 </ion-content>
