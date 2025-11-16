@@ -139,19 +139,29 @@ export class ExperienciaComponent {
   }
 
   navegarAEdicion(id: number): void {
-    const exp = this.experiencias().find(e => e.id === id);
-    if (exp) {
-      this.experienciaForm.patchValue({
-        nombre: (exp as any).nombre ?? (exp as any).name,
-        fecha: (exp as any).fecha ?? (exp as any).date,
-        hora: (exp as any).hora ?? (exp as any).time,
-        descripcion: (exp as any).descripcion ?? (exp as any).description,
-        capacidad: (exp as any).capacidad ?? (exp as any).capacity ?? null,
-        costo: (exp as any).costo ?? (exp as any).cost ?? null
-      });
-      this.selectedExperienciaId.set(id);
-      this.currentView.set('form');
-    }
+    // Obtener la experiencia desde la API antes de abrir el formulario de edición
+    this.api.getExperienciaById(id).subscribe({
+      next: (exp: any) => {
+        // Mapear respuesta al formulario (tolerante a nombres distintos)
+        this.experienciaForm.patchValue({
+          nombre: exp.nombre ?? exp.name ?? '',
+          fecha: exp.fecha ? (new Date(exp.fecha)).toISOString().split('T')[0] : (exp.date ? (new Date(exp.date)).toISOString().split('T')[0] : ''),
+          hora: exp.hora ?? exp.time ?? '',
+          descripcion: exp.descripcion ?? exp.description ?? '',
+          capacidad: exp.capacidad ?? exp.capacity ?? null,
+          costo: exp.costo ?? exp.cost ?? null
+        });
+        this.selectedExperienciaId.set(id);
+        this.currentView.set('form');
+      },
+      error: (err) => {
+        console.error('Error al obtener experiencia por ID:', err);
+        this.resultAlertHeader.set('Error');
+        this.resultAlertMessage.set(err?.message ?? 'No se pudo cargar la experiencia para edición');
+        this.lastOperationSuccess.set(false);
+        this.resultAlertOpen.set(true);
+      }
+    });
   }
 
   // Métodos de ayuda
@@ -250,9 +260,34 @@ export class ExperienciaComponent {
 
   eliminar(): void {
     const id = this.experienciaToDelete();
-    if (id) {
-      this.eliminarExperiencia.emit(id);
+    if (!id) {
+      this.isDeleteAlertOpen.set(false);
+      return;
     }
+
+    // Llamar API para eliminar
+    this.api.deleteExperiencia(id).subscribe({
+      next: (res) => {
+        console.log('Experiencia eliminada:', res);
+        // Remover de la lista local
+        this.listaCatas.update(list => list.filter((item: any) => item.id !== id));
+        // Emitir evento para compatibilidad con padres
+        this.eliminarExperiencia.emit(id);
+        // Mostrar feedback
+        this.resultAlertHeader.set('Eliminado');
+        this.resultAlertMessage.set('La experiencia fue eliminada correctamente.');
+        this.lastOperationSuccess.set(true);
+        this.resultAlertOpen.set(true);
+      },
+      error: (err) => {
+        console.error('Error al eliminar experiencia:', err);
+        this.resultAlertHeader.set('Error');
+        this.resultAlertMessage.set(err?.message ?? 'No se pudo eliminar la experiencia');
+        this.lastOperationSuccess.set(false);
+        this.resultAlertOpen.set(true);
+      }
+    });
+
     this.isDeleteAlertOpen.set(false);
     this.experienciaToDelete.set(null);
   }
