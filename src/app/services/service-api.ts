@@ -56,6 +56,10 @@ export class ServiceAPI {
   getUsuarioByExperienciaId(experienciaId: number): Observable<any> {
     return this.http.get(`${this.urlUsuario}/visita/${experienciaId}`);
   }
+  // metodo para editar usuario
+  patchUsuario(id: number, data: any): Observable<any> {
+    return this.http.patch(`${this.urlUsuario}/${id}`, data);
+  }
   // Método para obtener una experiencia por ID
   getExperienciaById(id: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/findOne/${id}`);
