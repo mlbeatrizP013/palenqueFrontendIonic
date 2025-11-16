@@ -76,6 +76,8 @@ export class Tab3Page {
       valores: this.valores,
       normas: this.normas,
       informacion: this.informacion,
+      //descripcion
+      //
     });
   }
 }
