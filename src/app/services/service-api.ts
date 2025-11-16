@@ -10,6 +10,7 @@ export class ServiceAPI {
 
   private baseUrl = 'http://localhost:3000/diaCata'; 
   private urlUsuario = 'http://localhost:3000/usuario';
+  private urlInfoHome = 'http://localhost:3000/info-home';
 
   constructor(private http: HttpClient) {}
 
@@ -17,6 +18,14 @@ export class ServiceAPI {
   findAll(): Observable<any> {
     return this.http.get(`${this.baseUrl}/findAll`);
   }
+  findAllInfoHome(): Observable<any> {
+    return this.http.get(`${this.urlInfoHome}/findAll`);
+  }
+  //Metodo para actualizar info home
+  patchInfoHome(id: number, data: any): Observable<any> {
+    return this.http.patch(`${this.urlInfoHome}/update/${id}`, data);
+  }
+  
   // Método para eliminar una experiencia por ID
   deleteExperiencia(id: number): Observable<any> {
     // Intentamos la ruta "delete/{id}" y si el backend responde 404 probamos
