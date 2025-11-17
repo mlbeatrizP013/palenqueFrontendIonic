@@ -10,143 +10,182 @@
 
     <div class="banner-scrim"></div>
 
-    <!-- 
-      BOTÓN EDITAR: 
-      - Cambiado a la sintaxis @if
-    -->
-    @if (!isEditing) {
-      <ion-button 
-        class="edit-button" 
-        fill="solid" 
-        shape="round"
-        (click)="toggleEditMode()">
-        Editar
-      </ion-button>
-    }
-
     <div class="banner-content">
       <h2 class="banner-main-title">LA HISTORIA DEL PALENQUE</h2>
-      <p class="banner-description">
-        Lorem ipsum del endikimi crowde suareve iba astingos. Popeae ona.
-      </p>
+      <p class="banner-description">{{historia}}</p>
     </div>
   </div>
 
   <div class="form-area ion-padding">
-   
-    @if (!isEditing) {
-      <div class="info-cards-container">
-        <div class="info-card">
-          <h3>Nuestra Visión</h3>
-          <p>{{ vision }}</p>
-        </div>
-        <div class="info-card">
-          <h3>Misión</h3>
-          <p>{{ mision }}</p>
-        </div>
-        <div class="info-card">
-          <h3>Valores</h3>
-          <p>{{ valores }}</p>
-        </div>
-        <div class="info-card">
-          <h3>Procesos Ancestrales</h3>
-          <p>
-            <ion-icon name="flask-outline"></ion-icon> <span>15</span>
-            <ion-icon name="leaf-outline"></ion-icon> <span>2</span>
-          </p>
-        </div>
-      </div>
-    }
-
-
     <div class="form-container">
+      <ion-label class="field-label">Historia</ion-label>
+      <ion-item lines="none" class="form-item">
+        <ion-textarea
+          [readonly]="!isEditingHistoria"
+          [(ngModel)]="historia"
+          placeholder="Describe la historia del palenque"
+          [autoGrow]="true"
+        ></ion-textarea>
+        <div slot="end">
+          @if (isEditingHistoria) {
+          <ion-button fill="clear" (click)="saveHistoria()">
+            <ion-icon name="save-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          } @else {
+          <ion-button fill="clear" (click)="toggleEditHistoria()">
+            <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          }
+        </div>
+      </ion-item>
+
       <ion-label class="field-label">Visión</ion-label>
       <ion-item lines="none" class="form-item">
         <ion-textarea
-          [readonly]="!isEditing" 
+          [readonly]="!isEditingVision"
           [(ngModel)]="vision"
           placeholder="Describe la visión de la empresa"
           [autoGrow]="true"
         ></ion-textarea>
-        <div class="item-badge" slot="end">2</div>
+        <div slot="end">
+          @if (isEditingVision) {
+          <ion-button fill="clear" (click)="saveVision()">
+            <ion-icon name="save-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          } @else {
+          <ion-button fill="clear" (click)="toggleEditVision()">
+            <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          }
+        </div>
       </ion-item>
 
       <ion-label class="field-label">Maestro mezcalero</ion-label>
       <ion-item lines="none" class="form-item">
         <ion-textarea
-          [readonly]="!isEditing"
+          [readonly]="!isEditingMaestro"
           [(ngModel)]="maestro"
           placeholder="Introduce el nombre del maestro"
           [autoGrow]="true"
         ></ion-textarea>
+        <div slot="end">
+          @if (isEditingMaestro) {
+          <ion-button fill="clear" (click)="saveMaestro()">
+            <ion-icon name="save-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          } @else {
+          <ion-button fill="clear" (click)="toggleEditMaestro()">
+            <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          }
+        </div>
       </ion-item>
 
       <ion-label class="field-label">Misión</ion-label>
       <ion-item lines="none" class="form-item">
         <ion-textarea
-          [readonly]="!isEditing"
+          [readonly]="!isEditingMision"
           [(ngModel)]="mision"
           placeholder="Describe la misión"
           [autoGrow]="true"
         ></ion-textarea>
-        <div class="item-extra-info" slot="end">
-          <span class="info-text">15 Jornadas</span>
-          <div class="item-badge">2</div>
+        <div slot="end">
+          @if (isEditingMision) {
+          <ion-button fill="clear" (click)="saveMision()">
+            <ion-icon name="save-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          } @else {
+          <ion-button fill="clear" (click)="toggleEditMision()">
+            <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          }
         </div>
       </ion-item>
-      
+
       <ion-label class="field-label">Valores</ion-label>
       <ion-item lines="none" class="form-item">
         <ion-textarea
-          [readonly]="!isEditing"
+          [readonly]="!isEditingValores"
           [(ngModel)]="valores"
           placeholder="Describe los valores"
           [autoGrow]="true"
         ></ion-textarea>
-        <div class="item-extra-info" slot="end">
-          <span class="info-text">15 Jornadas</span>
-          <div class="item-badge">2</div>
+        <div slot="end">
+          @if (isEditingValores) {
+          <ion-button fill="clear" (click)="saveValores()">
+            <ion-icon name="save-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          } @else {
+          <ion-button fill="clear" (click)="toggleEditValores()">
+            <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          }
         </div>
       </ion-item>
 
       <ion-label class="field-label">Normas de producción</ion-label>
       <ion-item lines="none" class="form-item">
         <ion-textarea
-          [readonly]="!isEditing"
-          [(ngModel)]="normas"
+          [readonly]="!isEditingNormas"
+          [(ngModel)]="normasProduccion"
           placeholder="Describe las normas de producción"
           [autoGrow]="true"
         ></ion-textarea>
-        <div class="item-extra-info" slot="end">
-          <span class="info-text">2 Destilados</span>
-          <div class="item-badge">2</div>
+        <div slot="end">
+          @if (isEditingNormas) {
+          <ion-button fill="clear" (click)="saveNormas()">
+            <ion-icon name="save-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          } @else {
+          <ion-button fill="clear" (click)="toggleEditNormas()">
+            <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          }
         </div>
       </ion-item>
 
-      <ion-label class="field-label">Informacion</ion-label>
+      <ion-label class="field-label">Ubicación</ion-label>
       <ion-item lines="none" class="form-item">
         <ion-textarea
-          [readonly]="!isEditing"
-          [(ngModel)]="informacion"
-          placeholder="informacion del lugar"
+          [readonly]="!isEditingUbicacion"
+          [(ngModel)]="ubicacion"
+          placeholder="Información del lugar y ubicación"
           [autoGrow]="true"
         ></ion-textarea>
-        <div class="item-extra-info" slot="end">
-          <span class="info-text">2 ubicacion</span>
-          <div class="item-badge">2</div>
+        <div slot="end">
+          @if (isEditingUbicacion) {
+          <ion-button fill="clear" (click)="saveUbicacion()">
+            <ion-icon name="save-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          } @else {
+          <ion-button fill="clear" (click)="toggleEditUbicacion()">
+            <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          }
         </div>
       </ion-item>
 
-     
-      @if (isEditing) {
-        <ion-button
-          expand="block"
-          class="save-button"
-          (click)="guardarCambios()"
-        >
-          GUARDAR CAMBIOS
-        </ion-button>
-      }
-    </div>
+      <ion-label class="field-label">Número de Contacto</ion-label>
+      <ion-item lines="none" class="form-item">
+        <ion-input
+          [readonly]="!isEditingContacto"
+          type="tel"
+          [(ngModel)]="numeroContacto"
+          placeholder="Ingresa el número de contacto"
+        ></ion-input>
+        <div slot="end">
+          @if (isEditingContacto) {
+          <ion-button fill="clear" (click)="saveContacto()">
+            <ion-icon name="save-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          } @else {
+          <ion-button fill="clear" (click)="toggleEditContacto()">
+            <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          }
+        </div>
+      </ion-item>
+
+      </div>
   </div>
 </ion-content>
