@@ -1,5 +1,5 @@
 import { Component, EnvironmentInjector, inject } from '@angular/core';
-import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/angular/standalone';
+import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel,IonBadge } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 
 import { 
@@ -15,7 +15,7 @@ import {
   templateUrl: 'tabs.page.html',
   styleUrls: ['tabs.page.scss'],
   standalone: true,
-  imports: [IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel], // 3. Esto ahora funcionará
+  imports: [IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel,IonBadge], // 3. Esto ahora funcionará
 })
 export class TabsPage {
   public environmentInjector = inject(EnvironmentInjector);
