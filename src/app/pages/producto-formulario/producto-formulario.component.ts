@@ -22,6 +22,7 @@ import {
 import { addIcons } from 'ionicons';
 import { close, checkmark, images, arrowBack, save } from 'ionicons/icons';
 import { Producto } from '../../interfaces/productos';
+import { ServiceAPI } from '../../services/service-api';
 
 @Component({
   selector: 'app-producto-formulario',
@@ -51,6 +52,7 @@ import { Producto } from '../../interfaces/productos';
 })
 export class ProductoFormularioComponent {
   private fb = inject(FormBuilder);
+  private api = inject(ServiceAPI);
 
   productoEditando = input<Producto | null>(null);
   guardarProducto = output<Omit<Producto, 'id' | 'fechaCreacion'>>();
@@ -66,7 +68,7 @@ export class ProductoFormularioComponent {
     imagen: ['', Validators.required]
   });
 
-  categorias = ['Tequila', 'Mezcal', 'Raicilla', 'Bacanora', 'Pulque'];
+  categorias: string[] = ['Tequila', 'Mezcal', 'Raicilla', 'Bacanora', 'Pulque'];
 
   constructor() {
     addIcons({ close, checkmark, images, arrowBack, save });
@@ -85,6 +87,18 @@ export class ProductoFormularioComponent {
         imagen: producto.imagen
       });
     }
+    // Intentar cargar las categorías desde la API; si falla, usar la lista por defecto
+    this.api.findAllCategorias().subscribe({
+      next: (res: any) => {
+        if (Array.isArray(res)) {
+          // Intentar mapear a nombres de categoría
+          this.categorias = res.map((c: any) => c.nombre ?? c.name ?? String(c));
+        }
+      },
+      error: (err) => {
+        console.warn('No se pudieron obtener categorías desde la API, usando valores por defecto', err);
+      }
+    });
   }
 
   guardar(): void {
