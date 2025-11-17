@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Bebida } from '../interfaces/productos';
+
 
 @Injectable({
   providedIn: 'root',
@@ -20,8 +20,8 @@ export class ServiceAPI {
   findAll(): Observable<any> {
     return this.http.get(`${this.baseUrl}/findAll`);
   }
-  findAllBebidas(): Observable<Bebida[]> {
-    return this.http.get<Bebida[]>(`${this.urlBebidas}/findAll`);
+  findAllBebidas():Observable<any> {
+    return this.http.get(`${this.urlBebidas}/findAll`);
   }
   // Metodo para obtener toda la info home
   findAllInfoHome(): Observable<any> {
