@@ -1,6 +1,10 @@
 
 ion-content {
   --background: #f0f2f5; 
+    --padding-start: 0px;
+    --padding-end: 0px;
+    --padding-top: 0px;
+    --padding-bottom: 0px
 }
 
 /* ----------------------------------------------------- */
@@ -9,11 +13,11 @@ ion-content {
 
 .banner-container {
   position: relative;
-  height: 200px;
+  height: 170px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content:center;
 }
 
 .banner-image {
@@ -81,7 +85,7 @@ ion-content {
 
 .form-area {
   background: #ffffff;
-  margin-top: -20px;
+  margin-top: -1px;
   position: relative;
   z-index: 4;
   padding: 20px 16px 30px 16px;
