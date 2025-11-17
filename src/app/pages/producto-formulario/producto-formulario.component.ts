@@ -17,7 +17,8 @@ import {
   IonText,
   IonSelect,
   IonSelectOption,
-  IonIcon
+  IonIcon,
+  ToastController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { close, checkmark, images, arrowBack, save } from 'ionicons/icons';
@@ -53,6 +54,7 @@ import { ServiceAPI } from '../../services/service-api';
 export class ProductoFormularioComponent {
   private fb = inject(FormBuilder);
   private api = inject(ServiceAPI);
+  private toastController = inject(ToastController);
 
   productoEditando = input<Producto | null>(null);
   guardarProducto = output<Omit<Producto, 'id' | 'fechaCreacion'>>();
@@ -62,7 +64,7 @@ export class ProductoFormularioComponent {
     nombre: ['', [Validators.required, Validators.minLength(3)]],
     categoria: ['', Validators.required],
     descripcion: ['', [Validators.required, Validators.minLength(5)]],
-    precioMXN: ['', [Validators.required, Validators.min(0)]],
+    precioMXN: ['', [Validators.required, Validators.min(1)]],
     stockInicial: ['', [Validators.required, Validators.min(1)]],
     stockMinimo: ['', [Validators.required, Validators.min(0)]],
     imagen: ['', Validators.required]
@@ -122,6 +124,16 @@ export class ProductoFormularioComponent {
   onCancelar(): void {
     this.cancelar.emit();
     this.productoForm.reset();
+  }
+
+  async mostrarToast(mensaje: string, color: 'success' | 'danger' = 'success'): Promise<void> {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 2000,
+      position: 'bottom',
+      color: color
+    });
+    await toast.present();
   }
 }
 

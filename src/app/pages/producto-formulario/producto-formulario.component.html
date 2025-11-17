@@ -75,7 +75,14 @@
       </ion-item>
       @if(productoForm.get('precioMXN')?.invalid && productoForm.get('precioMXN')?.touched) {
         <ion-text color="danger">
-          <p><small>Ingresa un precio válido (≥ 0)</small></p>
+          <p>
+            @if(productoForm.get('precioMXN')?.errors?.['required']) {
+              <small>El precio es requerido</small>
+            }
+            @if(productoForm.get('precioMXN')?.errors?.['min']) {
+              <small>El precio debe ser mayor a 1.00</small>
+            }
+          </p>
         </ion-text>
       }
 

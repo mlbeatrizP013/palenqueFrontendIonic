@@ -2,8 +2,9 @@
 
 <ion-content class="ion-padding">
   @if(currentView() === 'list') {
-    <ion-searchbar value="" (ionInput)="searchTerm.set($event.detail.value ?? '')"></ion-searchbar>
+    <ion-searchbar value="" placeholder="Buscar producto..." (ionInput)="searchTerm.set($event.detail.value ?? '')"></ion-searchbar>
 
+    <!-- Filtro por estado -->
     <ion-segment value="todos" (ionChange)="onFilterChange($event)">
       <ion-segment-button value="todos"><ion-label>Todos</ion-label></ion-segment-button>
       <ion-segment-button value="activo"><ion-label>Activos</ion-label></ion-segment-button>
@@ -11,20 +12,62 @@
       <ion-segment-button value="sin_stock"><ion-label>Sin Stock</ion-label></ion-segment-button>
     </ion-segment>
 
-    <ion-grid>
-      <ion-row>
-        @for (p of productosFiltrados(); track p.id) {
-          <ion-col size="12" size-md="6">
-            <app-producto-card
-              [producto]="p"
-              (verDetalle)="verDetalle($event)"
-              (editar)="editarProducto($event)"
-              (eliminar)="eliminarProducto($event)">
-            </app-producto-card>
-          </ion-col>
+    <!-- Filtro por categoría -->
+    <ion-item>
+      <ion-label>Categoría:</ion-label>
+      <ion-select (ionChange)="selectedCategory.set($event.detail.value)">
+        <ion-select-option value="todos">Todas las categorías</ion-select-option>
+        @for (cat of categorias(); track cat) {
+          <ion-select-option [value]="cat">{{ cat }}</ion-select-option>
         }
-      </ion-row>
-    </ion-grid>
+      </ion-select>
+    </ion-item>
+
+    <!-- Empty state: no hay registros -->
+    @if(productos().length === 0) {
+      <ion-card class="ion-text-center ion-margin-top">
+        <ion-card-header>
+          <ion-card-title>No hay registros en la tienda</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>Comienza creando tu primer producto</p>
+          <ion-button color="primary" expand="block" (click)="nuevaProducto()">
+            <ion-icon slot="start" name="add"></ion-icon>
+            Crear Primer Producto
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    }
+
+    <!-- Empty state: no hay resultados por filtro -->
+    @if(productos().length > 0 && productosFiltrados().length === 0) {
+      <ion-card class="ion-text-center ion-margin-top">
+        <ion-card-header>
+          <ion-card-title>No hay productos que coincidan</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>Intenta cambiar los filtros o la búsqueda</p>
+        </ion-card-content>
+      </ion-card>
+    }
+
+    <!-- Grid de productos -->
+    @if(productosFiltrados().length > 0) {
+      <ion-grid>
+        <ion-row>
+          @for (p of productosFiltrados(); track p.id) {
+            <ion-col size="12" size-md="6">
+              <app-producto-card
+                [producto]="p"
+                (verDetalle)="verDetalle($event)"
+                (editar)="editarProducto($event)"
+                (eliminar)="eliminarProducto($event)">
+              </app-producto-card>
+            </ion-col>
+          }
+        </ion-row>
+      </ion-grid>
+    }
 
     <ion-fab class="fab-bottom-right fab-standard" vertical="bottom" horizontal="end" slot="fixed">
       <ion-fab-button (click)="nuevaProducto()">

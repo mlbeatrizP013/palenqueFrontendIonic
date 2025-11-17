@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, inject } from '@angular/core';
 import {
   IonHeader,
   IonToolbar,
@@ -19,8 +19,14 @@ import {
   IonCard,
   IonCardHeader,
   IonCardTitle,
-  IonCardContent
+  IonCardContent,
+  IonItem,
+  IonSelect,
+  IonSelectOption,
+  ToastController,
+  AlertController
 } from '@ionic/angular/standalone';
+import { FormsModule } from '@angular/forms';
 import { addIcons } from 'ionicons';
 import { add, search, arrowBack } from 'ionicons/icons';
 import { ProductoFormularioComponent } from '../pages/producto-formulario/producto-formulario.component';
@@ -39,7 +45,7 @@ import { HeaderComponent } from 'src/app/components/header/header.component';
   standalone: true,
   imports: [
     CommonModule,
-    
+    FormsModule,
     IonContent,
     IonFab,
     IonFabButton,
@@ -56,6 +62,9 @@ import { HeaderComponent } from 'src/app/components/header/header.component';
     IonCardHeader,
     IonCardTitle,
     IonCardContent,
+    IonItem,
+    IonSelect,
+    IonSelectOption,
     ProductoFormularioComponent,
     ProductoCardComponent,
     HeaderComponent
@@ -68,10 +77,13 @@ export class Tab2Page {
   filterStatus = signal<'todos' | 'activo' | 'sin_stock' | 'stock_bajo' | 'inactivo'>('todos');
   productoEditando = signal<Producto | null>(null);
   productoSeleccionado = signal<Producto | null>(null);
+  categorias = signal<string[]>(['Tequila', 'Mezcal', 'Raicilla', 'Bacanora', 'Pulque']);
+  selectedCategory = signal<string>('todos');
 
   productosFiltrados = computed(() => {
     const search = this.searchTerm().toLowerCase();
     const status = this.filterStatus();
+    const categoria = this.selectedCategory();
 
     return this.productos().filter((p) => {
       const matchSearch =
@@ -80,18 +92,27 @@ export class Tab2Page {
         p.descripcion.toLowerCase().includes(search);
 
       const matchStatus = status === 'todos' || p.estado === status;
+      
+      const matchCategory = categoria === 'todos' || p.categoria === categoria;
 
-      return matchSearch && matchStatus;
+      return matchSearch && matchStatus && matchCategory;
     });
   });
 
-  constructor(private api: ServiceAPI) {
+  constructor(
+    private api: ServiceAPI,
+    private toastController: ToastController,
+    private alertController: AlertController
+  ) {
     addIcons({ add, search, arrowBack });
-    // Intentamos cargar las bebidas desde la API; si falla, usamos los datos locales como fallback
+    this.cargarBebidas();
+    this.cargarCategorias();
+  }
+
+  private cargarBebidas(): void {
     this.api.findAllBebidas().subscribe({
       next: (res: any) => {
-        // Si la API devuelve un array de bebidas, mapeamos a la interfaz Producto esperada
-        if (Array.isArray(res)) {
+        if (Array.isArray(res) && res.length > 0) {
           this.productos.set(
             res.map((b: any, idx: number) => ({
               id: b.id ?? b._id ?? idx + 1,
@@ -108,15 +129,39 @@ export class Tab2Page {
             }))
           );
         } else {
-          // respuesta inesperada: usamos los datos iniciales
-          this.productos.set(productosIniciales);
+          // Sin registros en la API, lista vacía
+          this.productos.set([]);
         }
       },
       error: (err) => {
-        console.error('No se pudo cargar bebidas desde la API, usando datos locales', err);
-        this.productos.set(productosIniciales);
+        console.error('No se pudo cargar bebidas desde la API', err);
+        this.productos.set([]);
       }
     });
+  }
+
+  private cargarCategorias(): void {
+    this.api.findAllCategorias().subscribe({
+      next: (res: any) => {
+        if (Array.isArray(res)) {
+          const cats = res.map((c: any) => c.nombre ?? c.name ?? String(c));
+          this.categorias.set(cats);
+        }
+      },
+      error: (err) => {
+        console.warn('No se pudieron obtener categorías desde la API', err);
+      }
+    });
+  }
+
+  private async mostrarToast(mensaje: string, color: 'success' | 'danger' = 'success'): Promise<void> {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 2000,
+      position: 'bottom',
+      color: color
+    });
+    await toast.present();
   }
 
   nuevaProducto(): void {
@@ -145,21 +190,12 @@ export class Tab2Page {
               : p
           );
           this.productos.set(productos);
+          this.mostrarToast('Producto actualizado exitosamente', 'success');
           this.cancelarForm();
         },
         error: (err) => {
           console.error('Error actualizando bebida', err);
-          // Degradado: aplicar cambios localmente aunque la API falle
-          const productos = this.productos().map((p) =>
-            p.id === productoEditar.id
-              ? {
-                  ...p,
-                  ...productoData
-                }
-              : p
-          );
-          this.productos.set(productos);
-          this.cancelarForm();
+          this.mostrarToast('Error al actualizar el producto', 'danger');
         }
       });
     } else {
@@ -171,23 +207,15 @@ export class Tab2Page {
           const nuevoProducto: Producto = {
             id: newId,
             ...productoData,
-            fechaCreccion: new Date() as any,
             fechaCreacion: new Date()
           } as Producto;
           this.productos.set([...this.productos(), nuevoProducto]);
+          this.mostrarToast('Producto guardado exitosamente', 'success');
           this.cancelarForm();
         },
         error: (err) => {
           console.error('Error creando bebida en la API', err);
-          // fallback: crear localmente
-          const nuevoId = Math.max(...this.productos().map((p) => p.id), 0) + 1;
-          const nuevoProducto: Producto = {
-            id: nuevoId,
-            ...productoData,
-            fechaCreacion: new Date()
-          };
-          this.productos.set([...this.productos(), nuevoProducto]);
-          this.cancelarForm();
+          this.mostrarToast('Error al guardar el producto', 'danger');
         }
       });
     }
@@ -210,12 +238,11 @@ export class Tab2Page {
         next: () => {
           this.productos.set(this.productos().filter((p) => p.id !== id));
           this.currentView.set('list');
+          this.mostrarToast('Producto eliminado exitosamente', 'success');
         },
         error: (err) => {
           console.error('Error eliminando bebida en la API', err);
-          // fallback local
-          this.productos.set(this.productos().filter((p) => p.id !== id));
-          this.currentView.set('list');
+          this.mostrarToast('Error al eliminar el producto', 'danger');
         }
       });
     }
