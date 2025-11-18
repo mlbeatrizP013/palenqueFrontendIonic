@@ -15,6 +15,7 @@ export class ServiceAPI {
   private urlInfoHome = 'http://localhost:3000/info-home';
   private urlBebidas = 'http://localhost:3000/bebidas';
   private urlCategorias = 'http://localhost:3000/categoria';
+  private urlCategorias = 'http://localhost:3000/categoria';
 
   constructor(private http: HttpClient) {}
 
@@ -86,6 +87,30 @@ export class ServiceAPI {
         return throwError(() => err);
       })
     );
+  }
+  // Metodo para obtener una bebida por ID
+  getBebidaById(id: number): Observable<any> {
+    return this.http.get(`${this.urlBebidas}/findOne/${id}`);
+  }
+  // Metodo para actualizar una bebida por ID
+  patchBebida(id: number, data: any): Observable<any> {
+    return this.http.patch(`${this.urlBebidas}/update/${id}`, data);
+  }
+  // Metodo para crear una nueva bebida
+  postBebida(data: any): Observable<any> {
+    return this.http.post(`${this.urlBebidas}/create`, data);
+  }
+  // Metodo para eliminar una bebida por ID
+  deleteBebida(id: number): Observable<any> {
+    return this.http.delete(`${this.urlBebidas}/delete/${id}`, { responseType: 'text' as 'json' });
+  }
+  //metodo para obtener bebidas por categoria
+  getBebidasByCategoria(categoriaId: number): Observable<any> {
+    return this.http.get(`${this.urlBebidas}/byCategoria/${categoriaId}`);
+  }
+  //metodo para obtener todas las categorias
+  findAllCategorias():Observable<any> {
+    return this.http.get(`${this.urlCategorias}/findAll`);
   }
   // Metodo para obtener toda la info home
   findAllInfoHome(): Observable<any> {

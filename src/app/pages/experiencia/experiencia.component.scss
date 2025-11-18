@@ -1,19 +1,36 @@
 :host {
+
   /* Header styling */
   ion-header ion-toolbar {
-    --background: var(--marron-agave);
+    --background: transparent;
     color: #fff;
     padding: 8px 0;
 
     ion-title,
     ion-title.header-title {
-      font-family: var(--font-heading);
       /* Mobile-friendly header title size */
       font-size: clamp(0.95rem, 3.5vw, 1.1rem);
-      font-weight: 600;
-      color: #fff;
       letter-spacing: -0.3px;
       text-align: center;
+      ///
+      /// 
+      /// 
+      /* PANEL DE ADMINISTRADOR */
+
+      width: 289px;
+      height: 25px;
+      left: calc(50% - 289px/2 - 2.5px);
+      top: 14px;
+
+      font-family: 'Merriweather';
+      font-style: normal;
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 25px;
+
+      color: #000000;
+
+
     }
 
     ion-button {
@@ -303,9 +320,17 @@
     padding: 6px;
 
     @media (max-width: 480px) {
-      &[size="12"] { width: 100%; }
-      &[size-md="6"] { width: 100%; }
-      &[size-lg="4"] { width: 100%; }
+      &[size="12"] {
+        width: 100%;
+      }
+
+      &[size-md="6"] {
+        width: 100%;
+      }
+
+      &[size-lg="4"] {
+        width: 100%;
+      }
     }
   }
 
@@ -322,4 +347,3 @@
     }
   }
 }
-
