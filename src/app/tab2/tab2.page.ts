@@ -77,7 +77,7 @@ export class Tab2Page {
   filterStatus = signal<'todos' | 'activo' | 'sin_stock' | 'stock_bajo' | 'inactivo'>('todos');
   productoEditando = signal<Producto | null>(null);
   productoSeleccionado = signal<Producto | null>(null);
-  categorias = signal<string[]>(['Tequila', 'Mezcal', 'Raicilla', 'Bacanora', 'Pulque']);
+  categorias = signal<{id: number, nombre: string}[]>([]);
   selectedCategory = signal<string>('todos');
 
   productosFiltrados = computed(() => {
@@ -105,8 +105,8 @@ export class Tab2Page {
     private alertController: AlertController
   ) {
     addIcons({ add, search, arrowBack });
-    this.cargarBebidas();
     this.cargarCategorias();
+    this.cargarBebidas();
   }
 
   private cargarBebidas(): void {
@@ -141,18 +141,29 @@ export class Tab2Page {
   }
 
   private cargarCategorias(): void {
+    // Cargar categorías desde la API (tabla categorias en BD)
     this.api.findAllCategorias().subscribe({
-      next: (res: any) => {
-        if (Array.isArray(res)) {
-          const cats = res.map((c: any) => c.nombre ?? c.name ?? String(c));
-          this.categorias.set(cats);
+      next: (res: any[]) => {
+        console.log('✅ Categorías recibidas de la BD:', res);
+        if (Array.isArray(res) && res.length > 0) {
+          // Guardar objetos completos con id y nombre
+          const categoriasDelAPI = res.map((c: any) => ({
+            id: c.id,
+            nombre: c.nombre ?? c.name ?? String(c)
+          }));
+          this.categorias.set(categoriasDelAPI);
+          console.log('✅ Categorías procesadas:', categoriasDelAPI);
+        } else {
+          console.warn('⚠️ No hay categorías en la API');
         }
       },
       error: (err) => {
-        console.warn('No se pudieron obtener categorías desde la API', err);
+        console.error('❌ Error obteniendo categorías desde la API:', err);
       }
     });
   }
+
+
 
   private async mostrarToast(mensaje: string, color: 'success' | 'danger' = 'success'): Promise<void> {
     const toast = await this.toastController.create({
@@ -175,12 +186,55 @@ export class Tab2Page {
     this.filterStatus.set(val);
   }
 
+  onCategoryChange(categoriaNombre: string): void {
+    this.selectedCategory.set(categoriaNombre);
+    // Opcionalmente, si quieres obtener bebidas específicas de la API:
+    // if (categoriaNombre !== 'todos') {
+    //   this.api.getBebidasByCategoria(categoriaNombre).subscribe({
+    //     next: (bebidas) => {
+    //       // Manejar bebidas filtradas de la API si es necesario
+    //     },
+    //     error: (err) => console.error('Error obteniendo bebidas por categoría', err)
+    //   });
+    // }
+  }
+
   guardarProducto(productoData: Omit<Producto, 'id' | 'fechaCreacion'>): void {
+    // Buscar el ID de la categoría por nombre
+    const categoriaObj = this.categorias().find(c => c.nombre === productoData.categoria);
+    
+    if (!categoriaObj) {
+      console.error('❌ Categoría no encontrada:', productoData.categoria);
+      console.error('❌ Categorías disponibles:', this.categorias());
+      this.mostrarToast('Error: Categoría no válida', 'danger');
+      return;
+    }
+
+    // Preparar datos exactamente como los espera el CreateBebidaDto del backend
+    const dataToSend = {
+      nombre: String(productoData.nombre).trim(),
+      descripcion: String(productoData.descripcion).trim(),
+      precio: Number(productoData.precioMXN),        // Backend espera 'precio' no 'precioMXN'
+      stock: Number(productoData.stockInicial),      // Backend espera 'stock' no 'stockInicial'
+      imagen: productoData.imagen ? String(productoData.imagen).trim() : 'https://images.unsplash.com/photo-1612528443702-f6741f70a049?w=300&h=400&fit=crop',
+      categoriaId: Number(categoriaObj.id)           // Backend espera 'categoriaId' como número
+    };
+
+    console.log('📤 Datos enviados al backend (formato DTO):', dataToSend);
+    console.log('📋 Tipos de datos:', {
+      nombre: typeof dataToSend.nombre,
+      descripcion: typeof dataToSend.descripcion,
+      precio: typeof dataToSend.precio + ' (valor: ' + dataToSend.precio + ')',
+      stock: typeof dataToSend.stock + ' (valor: ' + dataToSend.stock + ')',
+      imagen: typeof dataToSend.imagen,
+      categoriaId: typeof dataToSend.categoriaId + ' (valor: ' + dataToSend.categoriaId + ')'
+    });
+
     if (this.productoEditando()) {
       const productoEditar = this.productoEditando()!;
-      // Llamamos al API para actualizar
-      this.api.patchBebida(productoEditar.id, productoData).subscribe({
+      this.api.patchBebida(productoEditar.id, dataToSend).subscribe({
         next: (res) => {
+          console.log('✅ Producto actualizado:', res);
           const productos = this.productos().map((p) =>
             p.id === productoEditar.id
               ? {
@@ -194,15 +248,14 @@ export class Tab2Page {
           this.cancelarForm();
         },
         error: (err) => {
-          console.error('Error actualizando bebida', err);
+          console.error('❌ Error actualizando bebida:', err);
           this.mostrarToast('Error al actualizar el producto', 'danger');
         }
       });
     } else {
-      // Crear nueva bebida en la API
-      this.api.postBebida(productoData).subscribe({
+      this.api.postBebida(dataToSend).subscribe({
         next: (created: any) => {
-          // Si el backend devuelve el recurso creado con id, usarlo; si no, generar uno local
+          console.log('✅ Producto creado exitosamente:', created);
           const newId = created?.id ?? created?._id ?? Math.max(...this.productos().map((p) => p.id), 0) + 1;
           const nuevoProducto: Producto = {
             id: newId,
@@ -214,7 +267,7 @@ export class Tab2Page {
           this.cancelarForm();
         },
         error: (err) => {
-          console.error('Error creando bebida en la API', err);
+          console.error('❌ Error creando bebida:', err);
           this.mostrarToast('Error al guardar el producto', 'danger');
         }
       });

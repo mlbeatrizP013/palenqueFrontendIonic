@@ -15,10 +15,10 @@
     <!-- Filtro por categoría -->
     <ion-item>
       <ion-label>Categoría:</ion-label>
-      <ion-select (ionChange)="selectedCategory.set($event.detail.value)">
+      <ion-select (ionChange)="onCategoryChange($event.detail.value)">
         <ion-select-option value="todos">Todas las categorías</ion-select-option>
-        @for (cat of categorias(); track cat) {
-          <ion-select-option [value]="cat">{{ cat }}</ion-select-option>
+        @for (cat of categorias(); track cat.id) {
+          <ion-select-option [value]="cat.nombre">{{ cat.nombre }}</ion-select-option>
         }
       </ion-select>
     </ion-item>

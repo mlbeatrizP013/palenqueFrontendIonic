@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
+import { Producto } from '../interfaces/productos';
 
 
 @Injectable({
@@ -13,7 +14,7 @@ export class ServiceAPI {
   private urlUsuario = 'http://localhost:3000/usuario';
   private urlInfoHome = 'http://localhost:3000/info-home';
   private urlBebidas = 'http://localhost:3000/bebidas';
-  private urlCategorias = 'http://localhost:3000/categorias';
+  private urlCategorias = 'http://localhost:3000/categoria';
 
   constructor(private http: HttpClient) {}
 
@@ -21,24 +22,70 @@ export class ServiceAPI {
   findAll(): Observable<any> {
     return this.http.get(`${this.baseUrl}/findAll`);
   }
-  findAllBebidas():Observable<any> {
-    return this.http.get(`${this.urlBebidas}/findAll`);
+  findAllBebidas():Observable<Producto[]> {
+    console.log('🔍 Intentando obtener todas las bebidas de:', `${this.urlBebidas}/findAll`);
+    return this.http.get<Producto[]>(`${this.urlBebidas}/findAll`).pipe(
+      tap((data) => console.log('✅ Bebidas obtenidas exitosamente:', data)),
+      catchError((err) => {
+        console.error('❌ Error obteniendo bebidas:', err);
+        return throwError(() => err);
+      })
+    );
   }
   // Metodo para obtener una bebida por ID
-  getBebidaById(id: number): Observable<any> {
-    return this.http.get(`${this.urlBebidas}/findOne/${id}`);
+  getBebidaById(id: number): Observable<Producto> {
+    console.log('🔍 Intentando obtener bebida con ID:', id);
+    return this.http.get<Producto>(`${this.urlBebidas}/findOne/${id}`).pipe(
+      tap((data) => console.log('✅ Bebida obtenida exitosamente:', data)),
+      catchError((err) => {
+        console.error('❌ Error obteniendo bebida ID', id, ':', err);
+        return throwError(() => err);
+      })
+    );
   }
   // Metodo para actualizar una bebida por ID
-  patchBebida(id: number, data: any): Observable<any> {
-    return this.http.patch(`${this.urlBebidas}/update/${id}`, data);
+  patchBebida(id: number, data: any): Observable<Producto> {
+    console.log('🔄 Intentando actualizar bebida ID:', id, 'con datos:', data);
+    return this.http.patch<Producto>(`${this.urlBebidas}/update/${id}`, data).pipe(
+      tap((result) => console.log('✅ Bebida actualizada exitosamente:', result)),
+      catchError((err) => {
+        console.error('❌ Error actualizando bebida ID', id, ':', err);
+        return throwError(() => err);
+      })
+    );
   }
   // Metodo para crear una nueva bebida
-  postBebida(data: any): Observable<any> {
-    return this.http.post(`${this.urlBebidas}/create`, data);
+  postBebida(data: any): Observable<Producto> {
+    console.log('➕ Intentando crear nueva bebida con datos:', data);
+    console.log('📋 Estructura de datos:', JSON.stringify(data, null, 2));
+    return this.http.post<Producto>(`${this.urlBebidas}/create`, data).pipe(
+      tap((result) => console.log('✅ Bebida creada exitosamente:', result)),
+      catchError((err) => {
+        console.error('❌ Error creando bebida:', err);
+        console.error('❌ Status:', err.status);
+        console.error('❌ Mensaje del servidor:', err.error);
+        console.error('❌ Datos enviados:', data);
+        if (err.status === 400) {
+          console.error('⚠️ Bad Request - Posibles causas:');
+          console.error('   1. categoriaId no es un número válido');
+          console.error('   2. Falta algún campo requerido');
+          console.error('   3. Formato de algún campo incorrecto');
+          console.error('   4. El categoriaId no existe en la tabla categoria');
+        }
+        return throwError(() => err);
+      })
+    );
   }
   // Metodo para eliminar una bebida por ID
   deleteBebida(id: number): Observable<any> {
-    return this.http.delete(`${this.urlBebidas}/delete/${id}`, { responseType: 'text' as 'json' });
+    console.log('🗑️ Intentando eliminar bebida con ID:', id);
+    return this.http.delete(`${this.urlBebidas}/remove/${id}`, { responseType: 'text' as 'json' }).pipe(
+      tap((result) => console.log('✅ Bebida eliminada exitosamente:', result)),
+      catchError((err) => {
+        console.error('❌ Error eliminando bebida ID', id, ':', err);
+        return throwError(() => err);
+      })
+    );
   }
   // Metodo para obtener toda la info home
   findAllInfoHome(): Observable<any> {
@@ -106,9 +153,27 @@ export class ServiceAPI {
     return this.http.get(this.urlUsuario);
   }
 
-  // metodo para obtener todas las categorias
-  findAllCategorias():Observable<any> {
-    return this.http.get(`${this.urlCategorias}/findAll`);
+  // metodo para obtener todas las categorias de la BD
+  findAllCategorias(): Observable<any[]> {
+    console.log('🔍 Intentando obtener todas las categorías de:', `${this.urlCategorias}/findAll`);
+    return this.http.get<any[]>(`${this.urlCategorias}/findAll`).pipe(
+      tap((data) => console.log('✅ Categorías obtenidas exitosamente:', data)),
+      catchError((err) => {
+        console.error('❌ Error obteniendo categorías:', err);
+        return throwError(() => err);
+      })
+    );
+  }
+  // metodo para obtener bebidas por categoria (usando ID de categoría)
+  getBebidasByCategoria(categoriaId: number): Observable<Producto[]> {
+    console.log('🔍 Intentando obtener bebidas por categoría ID:', categoriaId);
+    return this.http.get<Producto[]>(`${this.urlBebidas}/byCategoria/${categoriaId}`).pipe(
+      tap((data) => console.log('✅ Bebidas por categoría obtenidas:', data)),
+      catchError((err) => {
+        console.error('❌ Error obteniendo bebidas por categoría ID', categoriaId, ':', err);
+        return throwError(() => err);
+      })
+    );
   }
   // Método para obtener un usuario por ID de la experiencia
   getUsuarioByExperienciaId(experienciaId: number): Observable<any> {

@@ -89,16 +89,22 @@ export class ProductoFormularioComponent {
         imagen: producto.imagen
       });
     }
-    // Intentar cargar las categorías desde la API; si falla, usar la lista por defecto
+    // Cargar categorías desde la API en tiempo real
+    this.cargarCategorias();
+  }
+
+  private cargarCategorias(): void {
+    // Cargar categorías desde la API (tabla categorias en BD)
     this.api.findAllCategorias().subscribe({
-      next: (res: any) => {
-        if (Array.isArray(res)) {
-          // Intentar mapear a nombres de categoría
+      next: (res: any[]) => {
+        if (Array.isArray(res) && res.length > 0) {
           this.categorias = res.map((c: any) => c.nombre ?? c.name ?? String(c));
+          console.log('Categorías cargadas en formulario:', this.categorias);
         }
       },
       error: (err) => {
         console.warn('No se pudieron obtener categorías desde la API, usando valores por defecto', err);
+        // Mantener las categorías por defecto
       }
     });
   }
