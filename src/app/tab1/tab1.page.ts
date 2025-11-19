@@ -5,7 +5,6 @@ import { AsistenciaComponent } from '../pages/asistencia/asistencia.component';
 import { CommonModule } from '@angular/common';
 
 import { Asistente, Experiencia } from '../interfaces/tipos';
-import { experienciasIniciales, asistentesIniciales } from '../data/data-inicial';
 
 import { HeaderComponent } from 'src/app/components/header/header.component';
 
@@ -28,10 +27,10 @@ export class Tab1Page {
   currentView = signal<'experiencias' | 'asistentes'>('experiencias');
   experienciaSeleccionada = signal<Experiencia | null>(null);
   
-  // Datos de ejemplo
-  experiencias = signal<Experiencia[]>(experienciasIniciales);
+  // Datos desde la BD
+  experiencias = signal<Experiencia[]>([]);
 
-  asistentes = signal<Asistente[]>(asistentesIniciales);
+  asistentes = signal<Asistente[]>([]);
 
   // Métodos de navegación
   verAsistentes(experienciaId: number): void {

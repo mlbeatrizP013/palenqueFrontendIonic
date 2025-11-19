@@ -98,10 +98,16 @@
   ion-fab-button {
     --background: #E53935;
     --color: #fff;
+    --border-radius: 50%;
+    --box-shadow: 0 4px 12px rgba(229, 57, 53, 0.4);
+    --padding-start: 0;
+    --padding-end: 0;
     width: 56px;
     height: 56px;
     font-size: 1.5rem;
     box-shadow: 0 4px 12px rgba(229, 57, 53, 0.4);
+    border-radius: 50%;
+    overflow: hidden;
 
     &:hover {
       --background: #c62828;

@@ -23,10 +23,12 @@ import {
   IonIcon,
   IonText,
   IonFab,
-  IonFabButton
+  IonFabButton,
+  IonSpinner,
+  IonBadge
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { add, create, trash, people, arrowBack, time, calendar, ellipsisVertical } from 'ionicons/icons';
+import { add, create, trash, people, arrowBack, time, calendar, ellipsisVertical, save } from 'ionicons/icons';
 import { Asistente, Experiencia } from '../../interfaces/tipos';
 import { ServiceAPI } from 'src/app/services/service-api';
 
@@ -59,7 +61,9 @@ import { ServiceAPI } from 'src/app/services/service-api';
     IonIcon,
     IonText,
     IonFab,
-    IonFabButton
+    IonFabButton,
+    IonSpinner,
+    IonBadge
   ]
 })
 export class ExperienciaComponent {
@@ -89,8 +93,8 @@ export class ExperienciaComponent {
     fecha: ['', Validators.required],
     hora: ['', Validators.required],
     descripcion: [''],
-    capacidad: [null, [Validators.required]],
-    costo: [null, [Validators.required]]
+    capacidad: [null, [Validators.required, Validators.min(1)]],  // No puede ser negativa
+    costo: [null, [Validators.required, Validators.min(0)]]        // No puede ser negativo
   });
 
   // Alerts / feedback
@@ -101,7 +105,7 @@ export class ExperienciaComponent {
   resultAlertButtons = [ { text: 'OK', role: 'cancel' } ];
 
   constructor() {
-    addIcons({ add, create, trash, people, arrowBack, time, calendar, ellipsisVertical });
+    addIcons({add,calendar,save,create,trash,people,arrowBack,time,ellipsisVertical});
         this.api.findAll().subscribe({
       next: (res) => {
         console.log('Datos recibidos:', res);
@@ -326,7 +330,8 @@ export class ExperienciaComponent {
     // Emitir para compatibilidad externa
     this.verAsistentes.emit(id);
 
-    // Cargar asistentes desde la API y mostrar la vista de asistentes
+    console.log('🔍 Cargando usuarios desde tabla usuario donde Idcata =', id);
+    // Cargar asistentes desde la API (tabla usuario filtrado por Idcata)
     this.isLoadingAsistentes.set(true);
     this.asistentesList.set([]);
     this.selectedExperienciaId.set(id);
@@ -361,7 +366,8 @@ export class ExperienciaComponent {
           }
         }
 
-        console.log('Visitantes normalized list:', normalized);
+        console.log('✅ Usuarios cargados de la BD (Idcata=' + id + '):', normalized);
+        console.log('📊 Total de asistentes encontrados:', normalized.length);
         this.asistentesList.set(normalized);
         this.currentView.set('attendees');
         this.isLoadingAsistentes.set(false);
@@ -398,6 +404,24 @@ export class ExperienciaComponent {
         this.resultAlertOpen.set(true);
       }
     });
+  }
+
+  getCataName(id: number): string {
+    const cata = this.listaCatas().find((c: any) => c.id === id);
+    return cata ? (cata.name || cata.nombre || 'Cata Desconocida') : 'Cata Desconocida';
+  }
+
+  getCataCapacidad(id: number): number {
+    const cata = this.listaCatas().find((c: any) => c.id === id);
+    return cata ? (cata.capacidad || cata.capacity || 0) : 0;
+  }
+
+  getAsistentesAprobadosCount(): number {
+    return this.asistentesList().filter((a: any) => a.status === 1).length;
+  }
+
+  getAsistentesPendientesCount(): number {
+    return this.asistentesList().filter((a: any) => a.status === 0 || a.status === null || a.status === undefined).length;
   }
 
   volver(): void {

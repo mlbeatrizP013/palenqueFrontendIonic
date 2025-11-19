@@ -97,12 +97,12 @@
         <div class="empty-state">
           <ion-card>
             <ion-card-content class="ion-text-center">
-              <h2>😴 No hay experiencias programadas</h2>
+              <h2> No hay experiencias programadas</h2>
               <p class="ion-margin-top">Comienza creando tu primera experiencia</p>
               <ion-button 
                 class="ion-margin-top"
                 (click)="navegarAFormulario()">
-                ➕ Crear Primera Experiencia
+                Crear Primera Experiencia
               </ion-button>
             </ion-card-content>
           </ion-card>
@@ -177,12 +177,22 @@
                     <ion-label position="stacked">👥 Capacidad *</ion-label>
                     <ion-input formControlName="capacidad" type="number" placeholder="20"></ion-input>
                   </ion-item>
+                  @if(experienciaForm.get('capacidad')?.invalid && experienciaForm.get('capacidad')?.touched) {
+                    <ion-text color="danger" class="ion-padding-start">
+                      <small>La capacidad debe ser mayor a 0</small>
+                    </ion-text>
+                  }
                 </ion-col>
                 <ion-col size="12" size-md="6">
                   <ion-item>
                     <ion-label position="stacked">💲 Costo *</ion-label>
                     <ion-input formControlName="costo" type="number" placeholder="250"></ion-input>
                   </ion-item>
+                  @if(experienciaForm.get('costo')?.invalid && experienciaForm.get('costo')?.touched) {
+                    <ion-text color="danger" class="ion-padding-start">
+                      <small>El costo no puede ser negativo</small>
+                    </ion-text>
+                  }
                 </ion-col>
               </ion-row>
             </ion-grid>
@@ -243,12 +253,25 @@
   </ion-alert>
 
   @if (currentView() === 'attendees') {
-    <div class="ion-padding">
-      <ion-button color="medium" fill="clear" (click)="navegarALista()">← Volver</ion-button>
-      <h2 class="ion-margin-top">👥 Asistentes</h2>
+      <ion-button color="medium" fill="clear" (click)="navegarALista()" style="margin: 8px 12px;">← Volver</ion-button>
+      
+      @if(selectedExperienciaId()) {
+        <ion-card class="cata-info-card">
+          <ion-card-header>
+            <ion-card-title>Asistentes: {{ getCataName(selectedExperienciaId()!) }}</ion-card-title>
+          </ion-card-header>
+        </ion-card>
+      }
 
       @if(isLoadingAsistentes()) {
-        <p>Cargando asistentes...</p>
+        <ion-card class="loading-card">
+          <ion-card-content class="ion-text-center">
+            <div class="loading-spinner">
+              <ion-spinner name="crescent" color="primary"></ion-spinner>
+            </div>
+            <p class="loading-text">Cargando asistentes...</p>
+          </ion-card-content>
+        </ion-card>
       } @else {
         @if(asistentesList().length === 0) {
           <ion-card>
@@ -257,36 +280,99 @@
             </ion-card-content>
           </ion-card>
         } @else {
-          <ion-grid>
-            <ion-row>
-              @for (v of asistentesList(); track v.id) {
-                <ion-col size="12" size-md="6">
-                  <ion-card>
-                    <ion-card-header>
-                      <ion-card-title>{{ v.nome ?? v.name ?? v.email }}</ion-card-title>
-                    </ion-card-header>
-                    <ion-card-content>
-                      <p><strong>Email:</strong> {{ v.email }}</p>
-                      <p><strong>Tel:</strong> {{ v.telefono ?? v.phone ?? '-' }}</p>
-                      <p><strong>Estado:</strong> {{ v.status === 1 ? 'Aprobado' : 'Pendiente' }}</p>
-                      <ion-grid>
-                        <ion-row>
-                          <ion-col>
-                            <ion-button expand="block" color="success" (click)="cambiarEstadoVisitante(v.id, 1)" [disabled]="v.__updating">Aprobar</ion-button>
-                          </ion-col>
-                          <ion-col>
-                            <ion-button expand="block" color="danger" (click)="cambiarEstadoVisitante(v.id, 0)" [disabled]="v.__updating">Revocar</ion-button>
-                          </ion-col>
-                        </ion-row>
-                      </ion-grid>
-                    </ion-card-content>
-                  </ion-card>
-                </ion-col>
-              }
-            </ion-row>
-          </ion-grid>
+          <div style="padding: 0 12px;">
+            <ion-grid>
+              <ion-row>
+                @for (v of asistentesList(); track v.id) {
+                  <ion-col size="12" size-md="6">
+                    <ion-card>
+                      <ion-card-header>
+                        <ion-card-title>{{ asistentesList().indexOf(v) + 1 }}. {{ v.nome }}</ion-card-title>
+                      </ion-card-header>
+                      <ion-card-content>
+                        <p><strong>📧</strong> {{ v.email }}</p>
+                        <p><strong>📊 Estado:</strong> 
+                          <ion-badge [color]="v.status === 1 ? 'success' : 'warning'">
+                            {{ v.status === 1 ? 'APROBADA' : 'PENDIENTE' }}
+                          </ion-badge>
+                        </p>
+                        <ion-grid>
+                          <ion-row>
+                            <ion-col>
+                              <ion-button expand="block" color="success" (click)="cambiarEstadoVisitante(v.id, 1)" [disabled]="v.__updating || v.status === 1">
+                                @if(v.__updating) {
+                                  <ion-spinner name="crescent"></ion-spinner>
+                                } @else {
+                                  Aprobar
+                                }
+                              </ion-button>
+                            </ion-col>
+                            <ion-col>
+                              <ion-button expand="block" color="danger" (click)="cambiarEstadoVisitante(v.id, 0)" [disabled]="v.__updating || v.status === 0">
+                                @if(v.__updating) {
+                                  <ion-spinner name="crescent"></ion-spinner>
+                                } @else {
+                                  Revocar
+                                }
+                              </ion-button>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-card-content>
+                    </ion-card>
+                  </ion-col>
+                }
+              </ion-row>
+            </ion-grid>
+
+            <!-- Resumen de estadísticas -->
+            <ion-card style="margin: 12px 0;">
+              <ion-card-header>
+                <ion-card-title>Resumen</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-grid class="stats-grid">
+                  <ion-row>
+                    <ion-col size="6">
+                      <div class="stat-item">
+                        <strong class="stat-number text-primary">
+                          {{ asistentesList().length }}
+                        </strong>
+                        <span class="stat-label">Total Registrados</span>
+                      </div>
+                    </ion-col>
+                    <ion-col size="6">
+                      <div class="stat-item">
+                        <strong class="stat-number text-green">
+                          {{ getAsistentesAprobadosCount() }}
+                        </strong>
+                        <span class="stat-label">Asistentes Aprobados</span>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col size="6">
+                      <div class="stat-item">
+                        <strong class="stat-number text-warning">
+                          {{ getAsistentesPendientesCount() }}
+                        </strong>
+                        <span class="stat-label">Pendientes</span>
+                      </div>
+                    </ion-col>
+                    <ion-col size="6">
+                      <div class="stat-item">
+                        <strong class="stat-number text-pink">
+                          {{ getCataCapacidad(selectedExperienciaId()!) }}
+                        </strong>
+                        <span class="stat-label">Capacidad</span>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-card-content>
+            </ion-card>
+          </div>
         }
       }
-    </div>
   }
 </ion-content>
