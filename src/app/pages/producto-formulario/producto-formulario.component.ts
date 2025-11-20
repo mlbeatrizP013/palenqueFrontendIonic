@@ -141,5 +141,42 @@ export class ProductoFormularioComponent {
     });
     await toast.present();
   }
+
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      // Validar que sea una imagen
+      if (!file.type.startsWith('image/')) {
+        this.mostrarToast('Por favor selecciona un archivo de imagen válido', 'danger');
+        return;
+      }
+
+      // Validar tamaño (máximo 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        this.mostrarToast('La imagen no debe superar los 5MB', 'danger');
+        return;
+      }
+
+      // Convertir a base64
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const base64String = e.target.result;
+        this.productoForm.patchValue({ imagen: base64String });
+        console.log('✅ Imagen convertida a base64, tamaño:', base64String.length, 'caracteres');
+      };
+      reader.onerror = (error) => {
+        console.error('❌ Error al leer la imagen:', error);
+        this.mostrarToast('Error al cargar la imagen', 'danger');
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  triggerFileInput(): void {
+    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.click();
+    }
+  }
 }
 

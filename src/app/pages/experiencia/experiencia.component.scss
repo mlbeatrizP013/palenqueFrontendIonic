@@ -47,6 +47,13 @@
     --padding-end: 8px;
     --padding-top: 8px;
     --padding-bottom: 8px;
+    --overflow: auto;
+  }
+
+  /* Contenedor de experiencias con scroll */
+  .experiencias-container {
+    min-height: 100%;
+    padding-bottom: 80px; /* Espacio para el FAB */
   }
 
   /* Cards */

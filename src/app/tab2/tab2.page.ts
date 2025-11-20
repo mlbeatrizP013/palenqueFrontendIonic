@@ -136,10 +136,24 @@ export class Tab2Page {
                 estado = 'stock_bajo';
               }
 
+              // Extraer el nombre de la categoría si viene como objeto
+              let categoriaNombre = 'Sin categoría';
+              if (b.categoria) {
+                if (typeof b.categoria === 'string') {
+                  categoriaNombre = b.categoria;
+                } else if (typeof b.categoria === 'object' && b.categoria.nombre) {
+                  categoriaNombre = b.categoria.nombre;
+                } else if (typeof b.categoria === 'object' && b.categoria.name) {
+                  categoriaNombre = b.categoria.name;
+                }
+              } else if (b.category) {
+                categoriaNombre = typeof b.category === 'string' ? b.category : b.category?.nombre ?? b.category?.name ?? 'Sin categoría';
+              }
+
               return {
                 id: b.id ?? b._id ?? idx + 1,
                 nombre: b.nombre ?? b.name ?? 'Sin nombre',
-                categoria: b.categoria ?? b.category ?? 'Sin categoría',
+                categoria: categoriaNombre,
                 descripcion: b.descripcion ?? b.description ?? '',
                 precioMXN: Number(b.precioMXN ?? b.price ?? 0),
                 stockInicial: stockInicial,

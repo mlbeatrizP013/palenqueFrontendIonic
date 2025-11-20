@@ -22,6 +22,13 @@
     --padding-end: 12px;
     --padding-top: 12px;
     --padding-bottom: 12px;
+    --overflow: auto;
+  }
+
+  /* Contenedor de productos con scroll */
+  .productos-container {
+    min-height: 100%;
+    padding-bottom: 80px; /* Espacio para el FAB */
   }
 
   /* Searchbar styling */
