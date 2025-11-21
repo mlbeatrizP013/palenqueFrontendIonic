@@ -1,1 +1,25 @@
-<app-header></app-header>
+<app-header>
+  <ion-toolbar>
+    <ion-title>Blog</ion-title>
+  </ion-toolbar>
+</app-header>
+
+
+<ion-content class="ion-padding">
+
+  @if (posts.length === 0) {
+    <ion-spinner></ion-spinner>
+  } @else {
+    <ion-list>
+      @for (post of posts; track post.id) {
+        <ion-item button (click)="openPost(post)">
+          <ion-label>
+            <h2>{{ post.title }}</h2>
+            <p>{{ post.contentSnippet }}</p>
+          </ion-label>
+        </ion-item>
+      }
+    </ion-list>
+  }
+
+</ion-content>
