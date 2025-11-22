@@ -34,7 +34,7 @@ import { ProductoCardComponent } from '../pages/producto-card/producto-card.comp
 import { ServiceAPI } from '../services/service-api';
 import { Producto } from '../interfaces/productos';
 
-import { HeaderComponent } from 'src/app/header/header.component';
+import { HeaderComponent } from 'src/app/components/header/header.component';
 
 
 @Component({
