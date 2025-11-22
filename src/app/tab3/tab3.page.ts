@@ -18,7 +18,7 @@ import {
   saveOutline, // Ícono para guardar
 } from 'ionicons/icons';
 
-import { HeaderComponent } from '../components/header/header.component';
+import { HeaderComponent } from '../header/header.component';
 import { ServiceAPI } from '../services/service-api';
 
 @Component({

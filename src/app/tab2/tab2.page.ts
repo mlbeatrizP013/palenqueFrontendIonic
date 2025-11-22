@@ -35,7 +35,7 @@ import { ServiceAPI } from '../services/service-api';
 import { Producto } from '../interfaces/productos';
 import { productosIniciales } from '../data/data-inicial';
 
-import { HeaderComponent } from 'src/app/components/header/header.component';
+import { HeaderComponent } from 'src/app/header/header.component';
 
 
 @Component({

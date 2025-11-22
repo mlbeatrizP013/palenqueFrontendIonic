@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { Asistente, Experiencia } from '../interfaces/tipos';
 import { experienciasIniciales, asistentesIniciales } from '../data/data-inicial';
 
-import { HeaderComponent } from 'src/app/components/header/header.component';
+import { HeaderComponent } from 'src/app/header/header.component';
 
 @Component({
   selector: 'app-tab1',
