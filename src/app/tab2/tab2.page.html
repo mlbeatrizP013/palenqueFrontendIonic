@@ -1,6 +1,6 @@
 <app-header></app-header>
 
-<ion-content class="ion-padding" [scrollY]="true">
+<ion-content class="ion-padding">
   @if(currentView() === 'list') {
     <ion-searchbar value="" placeholder="Buscar producto..." (ionInput)="searchTerm.set($event.detail.value ?? '')"></ion-searchbar>
 
@@ -53,22 +53,20 @@
 
     <!-- Grid de productos -->
     @if(productosFiltrados().length > 0) {
-      <div class="productos-container">
-        <ion-grid>
-          <ion-row>
-            @for (p of productosFiltrados(); track p.id) {
-              <ion-col size="12" size-md="6">
-                <app-producto-card
-                  [producto]="p"
-                  (verDetalle)="verDetalle($event)"
-                  (editar)="editarProducto($event)"
-                  (eliminar)="eliminarProducto($event)">
-                </app-producto-card>
-              </ion-col>
-            }
-          </ion-row>
-        </ion-grid>
-      </div>
+      <ion-grid>
+        <ion-row>
+          @for (p of productosFiltrados(); track p.id) {
+            <ion-col size="12" size-md="6">
+              <app-producto-card
+                [producto]="p"
+                (verDetalle)="verDetalle($event)"
+                (editar)="editarProducto($event)"
+                (eliminar)="eliminarProducto($event)">
+              </app-producto-card>
+            </ion-col>
+          }
+        </ion-row>
+      </ion-grid>
     }
 
     <ion-fab class="fab-bottom-right fab-standard" vertical="bottom" horizontal="end" slot="fixed">

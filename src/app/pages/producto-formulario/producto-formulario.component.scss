@@ -138,25 +138,3 @@ ion-card {
     font-family: var(--font-body);
   }
 }
-
-/* Preview de imagen */
-.image-preview {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  margin-top: 12px;
-  padding: 12px;
-  background: #f8f8f8;
-  border-radius: 8px;
-
-  img {
-    border: 2px solid #e0e0e0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    object-fit: cover;
-  }
-
-  ion-text {
-    margin: 0;
-  }
-}

@@ -5,7 +5,7 @@
   
 </ion-header>
  
-<ion-content [fullscreen]="true" [scrollY]="true">
+<ion-content [fullscreen]="true">
   @if (currentView() === 'list') {
     <ion-fab class="fab-bottom-right fab-standard" vertical="bottom" horizontal="end" slot="fixed">
       <ion-fab-button (click)="navegarAFormulario()" aria-label="Nueva experiencia">
@@ -14,7 +14,7 @@
     </ion-fab>
   }
   @if (currentView() === 'list') {
-    <div class="ion-padding experiencias-container">
+    <div class="ion-padding">
       @if(listaCatas().length > 0) {
         <ion-grid>
           <ion-row>

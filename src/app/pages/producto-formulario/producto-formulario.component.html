@@ -118,34 +118,18 @@
         </ion-text>
       }
 
-      <!-- Imagen -->
+      <!-- Imagen URL -->
       <ion-item>
-        <ion-label position="floating">Imagen del Producto</ion-label>
-        <ion-button fill="outline" (click)="triggerFileInput()" class="ion-margin-top">
-          <ion-icon slot="start" name="images"></ion-icon>
-          Seleccionar Imagen
-        </ion-button>
-        <input 
-          type="file" 
-          id="fileInput" 
-          accept="image/*" 
-          (change)="onFileSelected($event)"
-          style="display: none;"
-        />
+        <ion-label position="floating">URL de Imagen</ion-label>
+        <ion-input
+          type="url"
+          formControlName="imagen"
+          placeholder="https://ejemplo.com/imagen.jpg"
+        ></ion-input>
       </ion-item>
-      
-      @if(productoForm.get('imagen')?.value) {
-        <div class="image-preview ion-padding">
-          <ion-text color="success">
-            <p><small>✓ Imagen cargada correctamente</small></p>
-          </ion-text>
-          <img [src]="productoForm.get('imagen')?.value" alt="Vista previa" style="max-width: 200px; max-height: 200px; border-radius: 8px;" />
-        </div>
-      }
-      
       @if(productoForm.get('imagen')?.invalid && productoForm.get('imagen')?.touched) {
         <ion-text color="danger">
-          <p><small>La imagen es requerida</small></p>
+          <p><small>La URL de imagen es requerida</small></p>
         </ion-text>
       }
 
