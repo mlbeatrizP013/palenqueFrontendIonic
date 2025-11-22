@@ -148,9 +148,9 @@ export class AsistenciaComponent {
 
   getEstadoTexto(estado: string): string {
     switch (estado) {
-      case 'aprobada': return '✅ Aprobada';
-      case 'pendiente': return '⏳ Pendiente';
-      case 'rechazada': return '❌ Rechazada';
+      case 'aprobada': return 'Aprobada';
+      case 'pendiente': return 'Pendiente';
+      case 'rechazada': return 'Rechazada';
       default: return estado;
     }
   }
@@ -166,14 +166,14 @@ export class AsistenciaComponent {
   // Botones para el Action Sheet
   actionSheetButtons = [
     {
-      text: '✅ Aprobar',
+      text: 'Aprobar',
       role: 'aprobar',
       data: {
         action: 'aprobar'
       }
     },
     {
-      text: '❌ Rechazar',
+      text: 'Rechazar',
       role: 'rechazar',
       data: {
         action: 'rechazar'

@@ -268,10 +268,16 @@ ion-badge {
 ion-fab.fab-standard ion-fab-button {
   --background: #E53935;
   --color: #fff;
+  --border-radius: 50%;
+  --box-shadow: 0 6px 16px rgba(229,57,53,0.36);
+  --padding-start: 0;
+  --padding-end: 0;
   width: 56px;
   height: 56px;
   font-size: 1.3rem;
   box-shadow: 0 6px 16px rgba(229,57,53,0.36);
+  border-radius: 50% !important;
+  overflow: hidden;
 }
 
 @media (max-width: 480px) {
@@ -281,5 +287,12 @@ ion-fab.fab-standard ion-fab-button {
     height: 48px;
     font-size: 1.1rem;
   }
+}
+
+/* Asegurar que TODOS los botones FAB sean circulares sin borde */
+ion-fab-button {
+  --border-radius: 50%;
+  border-radius: 50% !important;
+  overflow: hidden;
 }
 

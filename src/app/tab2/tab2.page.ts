@@ -33,7 +33,6 @@ import { ProductoFormularioComponent } from '../pages/producto-formulario/produc
 import { ProductoCardComponent } from '../pages/producto-card/producto-card.component';
 import { ServiceAPI } from '../services/service-api';
 import { Producto } from '../interfaces/productos';
-import { productosIniciales } from '../data/data-inicial';
 
 import { HeaderComponent } from 'src/app/header/header.component';
 
@@ -91,8 +90,18 @@ export class Tab2Page {
         p.categoria.toLowerCase().includes(search) ||
         p.descripcion.toLowerCase().includes(search);
 
-      const matchStatus = status === 'todos' || p.estado === status;
+      // Determinar el estado real basado en stock
+      let estadoReal = 'activo';
+      if (p.stockActual === 0 || p.stockInicial === 0) {
+        estadoReal = 'sin_stock';
+      } else if (p.stockActual <= p.stockMinimo) {
+        estadoReal = 'stock_bajo';
+      }
+
+      // Filtrar por estado
+      const matchStatus = status === 'todos' || estadoReal === status;
       
+      // Filtrar por categoría
       const matchCategory = categoria === 'todos' || p.categoria === categoria;
 
       return matchSearch && matchStatus && matchCategory;
@@ -114,19 +123,47 @@ export class Tab2Page {
       next: (res: any) => {
         if (Array.isArray(res) && res.length > 0) {
           this.productos.set(
-            res.map((b: any, idx: number) => ({
-              id: b.id ?? b._id ?? idx + 1,
-              nombre: b.nombre ?? b.name ?? 'Sin nombre',
-              categoria: b.categoria ?? b.category ?? 'Sin categoría',
-              descripcion: b.descripcion ?? b.description ?? '',
-              precioMXN: Number(b.precioMXN ?? b.price ?? 0),
-              stockInicial: Number(b.stockInicial ?? b.stock ?? 0),
-              stockActual: Number(b.stockActual ?? b.stock ?? 0),
-              stockMinimo: Number(b.stockMinimo ?? 0),
-              imagen: b.imagen ?? b.image ?? '',
-              estado: b.estado ?? 'activo',
-              fechaCreacion: b.fechaCreacion ? new Date(b.fechaCreacion) : new Date()
-            }))
+            res.map((b: any, idx: number) => {
+              const stockActual = Number(b.stockActual ?? b.stock ?? 0);
+              const stockInicial = Number(b.stockInicial ?? b.stock ?? 0);
+              const stockMinimo = Number(b.stockMinimo ?? 0);
+              
+              // Calcular estado basado en stock
+              let estado: 'activo' | 'inactivo' | 'sin_stock' | 'stock_bajo' = 'activo';
+              if (stockActual === 0 || stockInicial === 0) {
+                estado = 'sin_stock';
+              } else if (stockActual <= stockMinimo) {
+                estado = 'stock_bajo';
+              }
+
+              // Extraer el nombre de la categoría si viene como objeto
+              let categoriaNombre = 'Sin categoría';
+              if (b.categoria) {
+                if (typeof b.categoria === 'string') {
+                  categoriaNombre = b.categoria;
+                } else if (typeof b.categoria === 'object' && b.categoria.nombre) {
+                  categoriaNombre = b.categoria.nombre;
+                } else if (typeof b.categoria === 'object' && b.categoria.name) {
+                  categoriaNombre = b.categoria.name;
+                }
+              } else if (b.category) {
+                categoriaNombre = typeof b.category === 'string' ? b.category : b.category?.nombre ?? b.category?.name ?? 'Sin categoría';
+              }
+
+              return {
+                id: b.id ?? b._id ?? idx + 1,
+                nombre: b.nombre ?? b.name ?? 'Sin nombre',
+                categoria: categoriaNombre,
+                descripcion: b.descripcion ?? b.description ?? '',
+                precioMXN: Number(b.precioMXN ?? b.price ?? 0),
+                stockInicial: stockInicial,
+                stockActual: stockActual,
+                stockMinimo: stockMinimo,
+                imagen: b.imagen ?? b.image ?? '',
+                estado: estado,
+                fechaCreacion: b.fechaCreacion ? new Date(b.fechaCreacion) : new Date()
+              };
+            })
           );
         } else {
           // Sin registros en la API, lista vacía

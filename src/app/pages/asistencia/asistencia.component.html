@@ -7,7 +7,7 @@
       </ion-button>
     </ion-buttons>
     <ion-title>
-      👥 Asistentes: {{ experienciaEditando()?.nombre || 'Experiencia Desconocida' }}
+       Asistentes: {{ experienciaEditando()?.name || 'Experiencia Desconocida' }}
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -101,7 +101,7 @@
     @else {
       <ion-card>
         <ion-card-content class="ion-text-center empty-state">
-          <h2>😴 No hay asistentes registrados</h2>
+          <h2> No hay asistentes registrados</h2>
           <p class="ion-margin-top">
             No hay asistentes registrados para esta experiencia.
           </p>

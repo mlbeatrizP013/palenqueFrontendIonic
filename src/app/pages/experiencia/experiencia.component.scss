@@ -47,6 +47,13 @@
     --padding-end: 8px;
     --padding-top: 8px;
     --padding-bottom: 8px;
+    --overflow: auto;
+  }
+
+  /* Contenedor de experiencias con scroll */
+  .experiencias-container {
+    min-height: 100%;
+    padding-bottom: 80px; /* Espacio para el FAB */
   }
 
   /* Cards */
@@ -138,6 +145,11 @@
 
   .text-green {
     color: var(--verde-agave);
+    font-weight: 600;
+  }
+
+  .text-warning {
+    color: #F39C12;
     font-weight: 600;
   }
 
@@ -343,7 +355,73 @@
     ion-fab-button {
       --background: #E53935;
       --color: #fff;
+      --border-radius: 50%;
+      --box-shadow: 0 4px 12px rgba(229, 57, 53, 0.4);
+      --padding-start: 0;
+      --padding-end: 0;
+      width: 56px;
+      height: 56px;
       box-shadow: 0 4px 12px rgba(229, 57, 53, 0.4);
+      border-radius: 50%;
+      overflow: hidden;
+
+      @media (max-width: 480px) {
+        width: 48px;
+        height: 48px;
+      }
     }
+  }
+
+  /* Card de información de cata */
+  .cata-info-card {
+    margin: 12px;
+    background: linear-gradient(135deg, var(--marron-agave) 0%, var(--cobre-oro) 100%);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+    ion-card-header {
+      border-bottom: none;
+      padding: 16px;
+    }
+
+    ion-card-title {
+      color: #fff;
+      font-size: clamp(1.1rem, 4vw, 1.3rem);
+      font-weight: 600;
+      text-align: center;
+    }
+  }
+
+  /* Card de loading mejorada */
+  .loading-card {
+    margin: 12px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    ion-card-content {
+      padding: 40px 20px;
+    }
+  }
+
+  .loading-spinner {
+    margin-bottom: 16px;
+
+    ion-spinner {
+      width: 48px;
+      height: 48px;
+      --color: var(--verde-agave);
+    }
+  }
+
+  .loading-text {
+    font-family: var(--font-body);
+    color: var(--gris-ceniza);
+    font-size: clamp(14px, 3vw, 16px);
+    margin: 0;
   }
 }
