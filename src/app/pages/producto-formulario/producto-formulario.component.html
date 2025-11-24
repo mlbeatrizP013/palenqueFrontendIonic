@@ -4,7 +4,6 @@
   </ion-card-header>
   <ion-card-content>
     <form [formGroup]="productoForm">
-      <!-- Nombre -->
       <ion-item>
         <ion-label position="floating">Nombre del Producto</ion-label>
         <ion-input
@@ -26,7 +25,6 @@
         </ion-text>
       }
 
-      <!-- Categoría -->
       <ion-item>
         <ion-label position="floating">Categoría</ion-label>
         <ion-select formControlName="categoria" placeholder="Selecciona una categoría">
@@ -41,7 +39,6 @@
         </ion-text>
       }
 
-      <!-- Descripción -->
       <ion-item>
         <ion-label position="floating">Descripción</ion-label>
         <ion-textarea
@@ -63,7 +60,6 @@
         </ion-text>
       }
 
-      <!-- Precio -->
       <ion-item>
         <ion-label position="floating">Precio (MXN)</ion-label>
         <ion-input
@@ -86,7 +82,6 @@
         </ion-text>
       }
 
-      <!-- Stock Inicial -->
       <ion-item>
         <ion-label position="floating">Stock Inicial</ion-label>
         <ion-input
@@ -102,7 +97,6 @@
         </ion-text>
       }
 
-      <!-- Stock Mínimo -->
       <ion-item>
         <ion-label position="floating">Stock Mínimo</ion-label>
         <ion-input
@@ -118,22 +112,45 @@
         </ion-text>
       }
 
-      <!-- Imagen URL -->
       <ion-item>
-        <ion-label position="floating">URL de Imagen</ion-label>
-        <ion-input
-          type="url"
-          formControlName="imagen"
-          placeholder="https://ejemplo.com/imagen.jpg"
-        ></ion-input>
+        <ion-label position="floating">Imagen del Producto</ion-label>
+        
+        <div class="ion-margin-top" style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <ion-button fill="outline" (click)="tomarFoto()">
+            <ion-icon slot="start" name="camera"></ion-icon>
+            Tomar Foto
+          </ion-button>
+
+          <ion-button fill="outline" (click)="triggerFileInput()">
+            <ion-icon slot="start" name="images"></ion-icon>
+            Seleccionar Imagen
+          </ion-button>
+        </div>
+
+        <input 
+          type="file" 
+          id="fileInput" 
+          accept="image/*" 
+          (change)="onFileSelected($event)"
+          style="display: none;"
+        />
       </ion-item>
+      
+      @if(productoForm.get('imagen')?.value) {
+        <div class="image-preview ion-padding">
+          <ion-text color="success">
+            <p><small>✓ Imagen cargada correctamente</small></p>
+          </ion-text>
+          <img [src]="productoForm.get('imagen')?.value" alt="Vista previa" style="max-width: 200px; max-height: 200px; border-radius: 8px;" />
+        </div>
+      }
+      
       @if(productoForm.get('imagen')?.invalid && productoForm.get('imagen')?.touched) {
         <ion-text color="danger">
-          <p><small>La URL de imagen es requerida</small></p>
+          <p><small>La imagen es requerida</small></p>
         </ion-text>
       }
 
-      <!-- Botones -->
       <ion-grid class="ion-margin-top">
         <ion-row>
           <ion-col>

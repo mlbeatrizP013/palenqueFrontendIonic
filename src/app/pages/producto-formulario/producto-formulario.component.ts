@@ -21,7 +21,11 @@ import {
   ToastController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { close, checkmark, images, arrowBack, save } from 'ionicons/icons';
+// AGREGADO: 'camera' al import de iconos
+import { close, checkmark, images, arrowBack, save, camera } from 'ionicons/icons';
+// AGREGADO: Importaciones de Capacitor Camera
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+
 import { Producto } from '../../interfaces/productos';
 import { ServiceAPI } from '../../services/service-api';
 
@@ -73,7 +77,8 @@ export class ProductoFormularioComponent {
   categorias: string[] = ['Tequila', 'Mezcal', 'Raicilla', 'Bacanora', 'Pulque'];
 
   constructor() {
-    addIcons({ close, checkmark, images, arrowBack, save });
+    // AGREGADO: 'camera' al addIcons
+    addIcons({ close, checkmark, images, arrowBack, save, camera });
   }
 
   ngOnInit() {
@@ -141,5 +146,64 @@ export class ProductoFormularioComponent {
     });
     await toast.present();
   }
-}
 
+  // MÉTODO NUEVO: Para tomar foto con Capacitor
+  async tomarFoto() {
+    try {
+      const image = await Camera.getPhoto({
+        quality: 90,
+        allowEditing: false,
+        resultType: CameraResultType.Base64,
+        source: CameraSource.Camera
+      });
+
+      if (image.base64String) {
+        // Agregamos el prefijo necesario para mostrar y guardar
+        const base64Image = `data:image/jpeg;base64,${image.base64String}`;
+        
+        this.productoForm.patchValue({ imagen: base64Image });
+        this.productoForm.markAsDirty();
+        this.mostrarToast('Foto capturada correctamente', 'success');
+      }
+    } catch (error) {
+      console.log('El usuario canceló o hubo error', error);
+    }
+  }
+
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      // Validar que sea una imagen
+      if (!file.type.startsWith('image/')) {
+        this.mostrarToast('Por favor selecciona un archivo de imagen válido', 'danger');
+        return;
+      }
+
+      // Validar tamaño (máximo 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        this.mostrarToast('La imagen no debe superar los 5MB', 'danger');
+        return;
+      }
+
+      // Convertir a base64
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const base64String = e.target.result;
+        this.productoForm.patchValue({ imagen: base64String });
+        console.log('✅ Imagen convertida a base64, tamaño:', base64String.length, 'caracteres');
+      };
+      reader.onerror = (error) => {
+        console.error('❌ Error al leer la imagen:', error);
+        this.mostrarToast('Error al cargar la imagen', 'danger');
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  triggerFileInput(): void {
+    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.click();
+    }
+  }
+}
