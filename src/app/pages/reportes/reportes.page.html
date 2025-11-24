@@ -1,0 +1,72 @@
+<app-header></app-header>
+
+<ion-content [fullscreen]="true" class="reportes-content">
+
+  <div class="titulo-seccion">
+    REPORTE Y ESTADÍSTICAS
+  </div>
+
+  <div class="estadisticas-lista">
+    <div
+      class="card-estadistica"
+      *ngFor="let card of estadisticas"
+    >
+      <div class="card-header">
+        <h2 class="card-titulo">{{ card.titulo }}</h2>
+        <p class="card-descripcion">{{ card.descripcion }}</p>
+      </div>
+
+      <div class="card-body">
+        <!-- gráfico de barras -->
+        <div class="grafico-barras">
+          <div class="barra-contenedor">
+            <div
+              class="barra barra-a"
+              [ngStyle]="{
+                height: (card.valorA / getMaxValor(card) * 100) + '%'
+              }"
+            ></div>
+            <span class="barra-label">A</span>
+          </div>
+
+          <div class="barra-contenedor">
+            <div
+              class="barra barra-b"
+              [ngStyle]="{
+                height: (card.valorB / getMaxValor(card) * 100) + '%'
+              }"
+            ></div>
+            <span class="barra-label">B</span>
+          </div>
+        </div>
+
+        <!-- gráfico tipo donut -->
+        <div class="grafico-donut">
+          <div
+            class="donut"
+            [ngStyle]="{
+              '--porcentaje': card.porcentaje + '%'
+            }"
+          >
+            <span class="donut-texto">{{ card.porcentaje }}%</span>
+          </div>
+          <p class="donut-subtexto">
+            Total: {{ card.total }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acciones">
+    <ion-button
+      expand="block"
+      class="btn-descargar"
+      (click)="descargarUsuariosXls()"
+    >
+      <ion-icon name="download-outline" slot="start"></ion-icon>
+      Descargar lista de usuarios XLS
+    </ion-button>
+  </div>
+
+</ion-content>

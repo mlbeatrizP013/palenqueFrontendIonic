@@ -1,31 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-
-import {
-  IonContent,
-  IonHeader,
-  IonToolbar,
-  IonButton,
-  IonIcon,
-} from '@ionic/angular/standalone';
-
-import { HeaderComponent } from '../../components/header/header.component';
 import { ReportesService, EstadisticaResumen } from '../../services/reportes.service';
 
 @Component({
   selector: 'app-reportes',
   templateUrl: './reportes.page.html',
   styleUrls: ['./reportes.page.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonContent,
-    IonButton,
-    IonIcon,
-    HeaderComponent, // <app-header>
-  ],
 })
 export class ReportesPage implements OnInit {
 
@@ -42,6 +21,7 @@ export class ReportesPage implements OnInit {
   }
 
   descargarUsuariosXls() {
-    console.log('Descargando XLS simulado...');
+    // Aquí luego se conectará a API/BD real
+    console.log('Descargando lista de usuarios en XLS (simulado)');
   }
 }

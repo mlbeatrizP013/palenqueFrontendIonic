@@ -29,7 +29,7 @@ export const routes: Routes = [
       {
         path: 'tab5',
         loadComponent: () =>
-          import('../tab5/tab5.component').then((m) => m.Tab5Component),
+          import('../pages/reportes/reportes.module').then(m => m.ReportesPage),
       },
       {
         path: '',
