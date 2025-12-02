@@ -10,6 +10,7 @@
       <ion-segment-button value="activo"><ion-label>Activos</ion-label></ion-segment-button>
       <ion-segment-button value="stock_bajo"><ion-label>Stock Bajo</ion-label></ion-segment-button>
       <ion-segment-button value="sin_stock"><ion-label>Sin Stock</ion-label></ion-segment-button>
+      <ion-segment-button value="apartados" (click)="toggleApartados()"><ion-label>Apartados</ion-label></ion-segment-button>
     </ion-segment>
 
     <!-- Filtro por categoría -->
@@ -51,19 +52,48 @@
       </ion-card>
     }
 
-    <!-- Grid de productos -->
+    <!-- Grid de productos con controles de apartado -->
     @if(productosFiltrados().length > 0) {
       <div class="productos-container">
         <ion-grid>
           <ion-row>
             @for (p of productosFiltrados(); track p.id) {
               <ion-col size="12" size-md="6">
-                <app-producto-card
-                  [producto]="p"
-                  (verDetalle)="verDetalle($event)"
-                  (editar)="editarProducto($event)"
-                  (eliminar)="eliminarProducto($event)">
-                </app-producto-card>
+                <ion-card>
+                  <img [src]="p.imagen" alt="{{ p.nombre }}" style="width:100%;height:200px;object-fit:cover;" />
+                  <ion-card-header>
+                    <ion-card-title>{{ p.nombre }}</ion-card-title>
+                  </ion-card-header>
+                  <ion-card-content>
+                    <p><strong>Categoría:</strong> {{ p.categoria }}</p>
+                    <p><strong>Precio:</strong> {{ p.precioMXN | currency:'MXN' }}</p>
+                    <p><strong>Stock disponible:</strong> {{ p.stockActual }} unidades</p>
+                    <p><strong>Estado:</strong> 
+                      @if(p.stockActual === 0) {
+                        <ion-badge color="danger">Sin Stock</ion-badge>
+                      } @else if(p.stockActual <= p.stockMinimo) {
+                        <ion-badge color="warning">Stock Bajo</ion-badge>
+                      } @else {
+                        <ion-badge color="success">Activo</ion-badge>
+                      }
+                    </p>
+                    
+                    <!-- Botones de administración -->
+                    <ion-grid style="margin-top: 1rem;">
+                      <ion-row>
+                        <ion-col size="4">
+                          <ion-button expand="block" size="small" style="--background: #4CAF50; --color: white;" (click)="verDetalle(p)">Ver</ion-button>
+                        </ion-col>
+                        <ion-col size="4">
+                          <ion-button expand="block" size="small" style="--background: #FFC107; --color: #333;" (click)="editarProducto(p)">Editar</ion-button>
+                        </ion-col>
+                        <ion-col size="4">
+                          <ion-button expand="block" size="small" color="danger" (click)="eliminarProducto(p.id)">Eliminar</ion-button>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-card-content>
+                </ion-card>
               </ion-col>
             }
           </ion-row>
@@ -105,5 +135,88 @@
         </ion-grid>
       </ion-card-content>
     </ion-card>
+  } @else if(currentView() === 'apartados') {
+    <!-- Vista de Apartados -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>📦 Todos los Apartados</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>Mostrando todos los productos apartados de todos los usuarios</p>
+        <ion-button expand="block" color="medium" (click)="toggleApartados()">Volver a la lista</ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    @if(apartados().length === 0) {
+      <ion-card class="ion-text-center">
+        <ion-card-content>
+          <p>No hay apartados registrados</p>
+        </ion-card-content>
+      </ion-card>
+    } @else {
+      @for (apartado of apartados(); track apartado.id) {
+        <ion-card style="position: relative; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 1rem;">
+          <!-- Botón de cerrar en la esquina -->
+          <ion-button 
+            style="position: absolute; top: 8px; right: 8px; z-index: 10;" 
+            size="small" 
+            color="danger" 
+            fill="solid"
+            shape="round"
+            (click)="eliminarApartado(apartado.id)">
+            ✕
+          </ion-button>
+
+          <ion-card-content style="padding: 16px;">
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <!-- Producto -->
+              <div style="display: flex; align-items: flex-start; gap: 12px;">
+                <span style="font-size: 24px; min-width: 32px;">🍷</span>
+                <div style="flex: 1;">
+                  <div style="font-weight: 600; color: #8b4513; font-size: 13px; margin-bottom: 2px;">Producto:</div>
+                  <div style="color: #333; font-size: 15px;">{{ apartado.bebida?.nombre || 'Producto no disponible' }}</div>
+                </div>
+              </div>
+
+              <!-- Usuario -->
+              <div style="display: flex; align-items: flex-start; gap: 12px;">
+                <span style="font-size: 24px; min-width: 32px;">👤</span>
+                <div style="flex: 1;">
+                  <div style="font-weight: 600; color: #8b4513; font-size: 13px; margin-bottom: 2px;">Usuario:</div>
+                  <div style="color: #333; font-size: 15px;">{{ apartado.usuario?.nome || 'Usuario desconocido' }}</div>
+                </div>
+              </div>
+
+              <!-- Correo -->
+              <div style="display: flex; align-items: flex-start; gap: 12px;">
+                <span style="font-size: 24px; min-width: 32px;">📧</span>
+                <div style="flex: 1;">
+                  <div style="font-weight: 600; color: #8b4513; font-size: 13px; margin-bottom: 2px;">Correo:</div>
+                  <div style="color: #333; font-size: 15px;">{{ apartado.usuario?.email || 'N/A' }}</div>
+                </div>
+              </div>
+
+              <!-- Cantidad -->
+              <div style="display: flex; align-items: flex-start; gap: 12px;">
+                <span style="font-size: 24px; min-width: 32px;">🔢</span>
+                <div style="flex: 1;">
+                  <div style="font-weight: 600; color: #8b4513; font-size: 13px; margin-bottom: 2px;">Cantidad:</div>
+                  <div style="color: #333; font-size: 15px;">{{ apartado.cantidad }} unidad(es)</div>
+                </div>
+              </div>
+
+              <!-- Total -->
+              <div style="display: flex; align-items: flex-start; gap: 12px;">
+                <span style="font-size: 24px; min-width: 32px;">💰</span>
+                <div style="flex: 1;">
+                  <div style="font-weight: 600; color: #8b4513; font-size: 13px; margin-bottom: 2px;">Total:</div>
+                  <div style="color: #ff6b35; font-size: 20px; font-weight: bold;">{{ calcularTotal(apartado) | currency:'MXN' }}</div>
+                </div>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      }
+    }
   }
 </ion-content>

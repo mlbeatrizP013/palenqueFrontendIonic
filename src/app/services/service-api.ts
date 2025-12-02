@@ -14,6 +14,7 @@ export class ServiceAPI {
   private urlInfoHome = 'http://localhost:3000/info-home';
   private urlBebidas = 'http://localhost:3000/bebidas';
   private urlCategorias = 'http://localhost:3000/categoria';
+  private urlapartados = 'http://localhost:3000/apartados';
 
   constructor(private http: HttpClient) {}
 
@@ -191,5 +192,61 @@ export class ServiceAPI {
 
   patchUsuario(id: number, data: any): Observable<any> {
     return this.http.patch(`${this.urlUsuario}/${id}`, data);
+  }
+
+  // ==========================================
+  // MÉTODOS DE APARTADOS
+  // ==========================================
+
+  findAllApartados(): Observable<any[]> {
+    console.log('🔍 Obteniendo apartados desde:', `${this.urlapartados}`);
+    return this.http.get<any[]>(`${this.urlapartados}`).pipe(
+      tap((data) => console.log('✅ Apartados RAW del backend:', data)),
+      catchError((err) => {
+        console.error('❌ Error obteniendo apartados:', err);
+        return throwError(() => err);
+      })
+    );
+  }
+
+  // Nuevo método para obtener apartado con relaciones pobladas
+  getApartadoById(id: number): Observable<any> {
+    console.log('🔍 Obteniendo apartado con relaciones, ID:', id);
+    return this.http.get<any>(`${this.urlapartados}/${id}`).pipe(
+      tap((data) => console.log('✅ Apartado con relaciones:', data)),
+      catchError((err) => {
+        console.error('❌ Error obteniendo apartado:', err);
+        return throwError(() => err);
+      })
+    );
+  }
+
+  createApartado(data: { cantidad: number; usuarioID: number; bebidasID: number }): Observable<any> {
+    console.log('📦 Enviando apartado a:', this.urlapartados);
+    console.log('📦 Datos:', data);
+    return this.http.post(this.urlapartados, data).pipe(
+      catchError((err) => {
+        console.error('Error creando apartado:', err);
+        return throwError(() => err);
+      })
+    );
+  }
+
+  deleteApartado(id: number): Observable<any> {
+    return this.http.delete(`${this.urlapartados}/remove/${id}`, { responseType: 'text' as 'json' }).pipe(
+      catchError((err) => {
+        console.error('Error eliminando apartado:', err);
+        return throwError(() => err);
+      })
+    );
+  }
+
+  getApartadosByUsuario(usuarioId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.urlapartados}/usuario/${usuarioId}`).pipe(
+      catchError((err) => {
+        console.error('Error obteniendo apartados del usuario:', err);
+        return throwError(() => err);
+      })
+    );
   }
 }

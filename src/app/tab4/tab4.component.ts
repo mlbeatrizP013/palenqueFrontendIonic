@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   selector: 'app-tab4',
   templateUrl: './tab4.component.html',
   styleUrls: ['./tab4.component.scss'],
-  imports: [HeaderComponent, IonHeader, IonicModule]
+  imports: [HeaderComponent, IonicModule]
 })
 export class Tab4Component  implements OnInit {
   apiKey = 'AIzaSyC3ws9P2fMAhK6w7W6TV9cn6bAk4RsF6Ko';
