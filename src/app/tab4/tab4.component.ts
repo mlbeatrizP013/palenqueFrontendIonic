@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
   selector: 'app-tab4',
   templateUrl: './tab4.component.html',
   styleUrls: ['./tab4.component.scss'],
+
   imports: [HeaderComponent, IonicModule]
 })
 export class Tab4Component  implements OnInit {
