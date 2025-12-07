@@ -8,13 +8,20 @@ import { Producto } from '../interfaces/productos';
   providedIn: 'root',
 })
 export class ServiceAPI {
-  // 💡 RECOMENDACIÓN: Mover estas URLs a environments.ts para producción
-  private baseUrl = 'http://localhost:3000/diaCata';
-  private urlUsuario = 'http://localhost:3000/usuario';
-  private urlInfoHome = 'http://localhost:3000/info-home';
-  private urlBebidas = 'http://localhost:3000/bebidas';
-  private urlCategorias = 'http://localhost:3000/categoria';
-  private urlapartados = 'http://localhost:3000/apartados';
+  // ==========================================
+  // ⚙️ CONFIGURACIÓN DE CONEXIÓN
+  // ==========================================
+  
+  // Tu IP actual (Cámbiala aquí si mañana es diferente)
+  private ipServidor = 'http://192.168.1.65:3000'; 
+  
+  // URLs construidas automáticamente usando la IP
+  private baseUrl =       `${this.ipServidor}/diaCata`;
+  private urlUsuario =    `${this.ipServidor}/usuario`;
+  private urlInfoHome =   `${this.ipServidor}/info-home`;
+  private urlBebidas =    `${this.ipServidor}/bebidas`;
+  private urlCategorias = `${this.ipServidor}/categoria`;
+  private urlapartados =  `${this.ipServidor}/apartados`;
 
   constructor(private http: HttpClient) {}
 
