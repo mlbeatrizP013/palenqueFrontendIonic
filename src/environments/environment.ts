@@ -2,8 +2,11 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+
 export const environment = {
-  production: false
+  production: true,
+  // Borra localhost y pon tu nueva URL de Railway:
+  apiUrl: 'https://backpalenque-production.up.railway.app' 
 };
 
 /*
