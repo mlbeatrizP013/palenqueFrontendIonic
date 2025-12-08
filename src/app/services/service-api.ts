@@ -12,10 +12,10 @@ export class ServiceAPI {
   // ⚙️ CONFIGURACIÓN DE CONEXIÓN
   // ==========================================
   
-  // Tu IP actual (Cámbiala aquí si mañana es diferente)
-  private ipServidor = 'http://192.168.1.65:3000'; 
+  // 👇 CAMBIO IMPORTANTE: Usamos la URL de Railway en vez de la IP local
+  private ipServidor = 'https://backpalenque-production-7d19.up.railway.app'; 
   
-  // URLs construidas automáticamente usando la IP
+  // URLs construidas automáticamente (esto se queda igual)
   private baseUrl =       `${this.ipServidor}/diaCata`;
   private urlUsuario =    `${this.ipServidor}/usuario`;
   private urlInfoHome =   `${this.ipServidor}/info-home`;
@@ -24,6 +24,8 @@ export class ServiceAPI {
   private urlapartados =  `${this.ipServidor}/apartados`;
 
   constructor(private http: HttpClient) {}
+
+  // ... (El resto de tus métodos siguen igual)
 
   // ==========================================
   // MÉTODOS DE EXPERIENCIAS (diaCata)
