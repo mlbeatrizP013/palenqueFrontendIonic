@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Component, inject, input, output } from '@angular/core';
+import { Component, inject, input, output, OnInit } from '@angular/core'; // Agregué OnInit aquí explícitamente
 import {
   IonButton,
   IonCard,
@@ -21,9 +21,12 @@ import {
   ToastController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { close, checkmark, images, arrowBack, save } from 'ionicons/icons';
+// Agregué el icono 'camera'
+import { close, checkmark, images, arrowBack, save, camera } from 'ionicons/icons';
 import { Producto } from '../../interfaces/productos';
 import { ServiceAPI } from '../../services/service-api';
+// IMPORTACIÓN DEL PLUGIN DE CÁMARA
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 @Component({
   selector: 'app-producto-formulario',
@@ -51,7 +54,7 @@ import { ServiceAPI } from '../../services/service-api';
     IonIcon
   ]
 })
-export class ProductoFormularioComponent {
+export class ProductoFormularioComponent implements OnInit {
   private fb = inject(FormBuilder);
   private api = inject(ServiceAPI);
   private toastController = inject(ToastController);
@@ -73,7 +76,8 @@ export class ProductoFormularioComponent {
   categorias: string[] = ['Tequila', 'Mezcal', 'Raicilla', 'Bacanora', 'Pulque'];
 
   constructor() {
-    addIcons({ close, checkmark, images, arrowBack, save });
+    // Agregué 'camera' a los iconos
+    addIcons({ close, checkmark, images, arrowBack, save, camera });
   }
 
   ngOnInit() {
@@ -89,12 +93,33 @@ export class ProductoFormularioComponent {
         imagen: producto.imagen
       });
     }
-    // Cargar categorías desde la API en tiempo real
     this.cargarCategorias();
   }
 
+  // NUEVA FUNCIÓN PARA TOMAR FOTO
+  async tomarFoto() {
+    try {
+      const image = await Camera.getPhoto({
+        quality: 90,
+        allowEditing: false,
+        resultType: CameraResultType.DataUrl, // Esto devuelve Base64 (data:image/jpeg;base64,...)
+        source: CameraSource.Prompt // Pregunta al usuario: ¿Cámara o Galería?
+      });
+
+      if (image.dataUrl) {
+        // Asignamos el Base64 al campo del formulario
+        this.productoForm.patchValue({
+          imagen: image.dataUrl
+        });
+        // Marcamos el campo como 'touched' para que la validación visual funcione
+        this.productoForm.get('imagen')?.markAsTouched();
+      }
+    } catch (error) {
+      console.log('El usuario canceló la foto o hubo un error', error);
+    }
+  }
+
   private cargarCategorias(): void {
-    // Cargar categorías desde la API (tabla categorias en BD)
     this.api.findAllCategorias().subscribe({
       next: (res: any[]) => {
         if (Array.isArray(res) && res.length > 0) {
@@ -104,7 +129,6 @@ export class ProductoFormularioComponent {
       },
       error: (err) => {
         console.warn('No se pudieron obtener categorías desde la API, usando valores por defecto', err);
-        // Mantener las categorías por defecto
       }
     });
   }
@@ -142,4 +166,3 @@ export class ProductoFormularioComponent {
     await toast.present();
   }
 }
-

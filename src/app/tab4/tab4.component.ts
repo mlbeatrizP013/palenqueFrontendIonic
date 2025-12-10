@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Browser } from '@capacitor/browser';
 import { HeaderComponent } from 'src/app/components/header/header.component';
 import { IonHeader } from "@ionic/angular/standalone";
 import { IonicModule } from "@ionic/angular";
@@ -44,5 +45,13 @@ export class Tab4Component  implements OnInit {
   openPost(post:any){
     this.router.navigate(['/post-detail',post.id]);
   }
+
+ async abrirHistorias() {
+    await Browser.open({
+      url: 'https://historiaspalenque.blogspot.com/2025/11/historias-palenque.html',
+      presentationStyle: 'fullscreen'
+    });
+  }
+
 
 }

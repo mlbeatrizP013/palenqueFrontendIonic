@@ -119,17 +119,34 @@
       }
 
       <!-- Imagen URL -->
-      <ion-item>
-        <ion-label position="floating">URL de Imagen</ion-label>
-        <ion-input
-          type="url"
-          formControlName="imagen"
-          placeholder="https://ejemplo.com/imagen.jpg"
-        ></ion-input>
+      <ion-item lines="none">
+        <ion-label position="stacked">Imagen del Producto</ion-label>
+        
+        @if(productoForm.get('imagen')?.value) {
+          <div class="ion-text-center ion-padding-vertical">
+            <img [src]="productoForm.get('imagen')?.value" 
+                 style="max-height: 200px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" 
+                 alt="Vista previa" />
+          </div>
+        }
+
+        <ion-button expand="block" fill="outline" class="ion-margin-top" (click)="tomarFoto()">
+          <ion-icon slot="start" name="camera"></ion-icon>
+          {{ productoForm.get('imagen')?.value ? 'Cambiar Imagen' : 'Seleccionar o Tomar Foto' }}
+        </ion-button>
+        
+        <input type="hidden" formControlName="imagen">
       </ion-item>
+
+      @if(productoForm.get('imagen')?.invalid && productoForm.get('imagen')?.touched) {
+        <ion-text color="danger" class="ion-padding-start">
+          <p><small>La imagen es requerida</small></p>
+        </ion-text>
+      }
+
       @if(productoForm.get('imagen')?.invalid && productoForm.get('imagen')?.touched) {
         <ion-text color="danger">
-          <p><small>La URL de imagen es requerida</small></p>
+          <p><small>La  imagen es requerida</small></p>
         </ion-text>
       }
 
