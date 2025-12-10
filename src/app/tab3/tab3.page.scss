@@ -1,4 +1,8 @@
 
+:host {
+  font-family: 'Montserrat', sans-serif;
+}
+
 ion-content {
   --background: #f0f2f5; 
     --padding-start: 0px;
@@ -70,6 +74,7 @@ ion-content {
   font-weight: bold;
   margin: 0 0 6px 0; 
   color:#ffffff;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .banner-description {
@@ -77,6 +82,7 @@ ion-content {
   margin: 0;
   opacity: 0.9;
   line-height: 1.3;
+  font-family: 'Montserrat', sans-serif;
 }
 
 /* ----------------------------------------------------- */
@@ -122,6 +128,7 @@ ion-content {
     font-weight: bold;
     color: #453e3b;
     margin: 0 0 5px 0;
+    font-family: 'Montserrat', sans-serif;
   }
 
   p {
@@ -129,6 +136,7 @@ ion-content {
     color: #6d6d6d;
     margin: 0;
     line-height: 1.3;
+    font-family: 'Montserrat', sans-serif;
     
     ion-icon {
       font-size: 0.9rem;
@@ -156,6 +164,7 @@ ion-content {
   margin-bottom: 8px; 
   display: block;
   text-transform: none; 
+  font-family: 'Montserrat', sans-serif;
 }
 
 .form-item {
@@ -173,7 +182,8 @@ ion-content {
     --padding-start: 0;
     --padding-end: 0;
     --color: #333;
-    font-size: 0.9rem; 
+    font-size: 0.9rem;
+    font-family: 'Montserrat', sans-serif; 
     
     &::placeholder {
       color: #a0a0a0;
@@ -218,4 +228,5 @@ ion-content {
   height: 52px; 
   font-size: 1.05rem; 
   text-transform: uppercase;
+  font-family: 'Montserrat', sans-serif;
 }
