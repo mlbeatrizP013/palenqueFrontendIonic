@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.palenque.app',
-  appName: 'palenqueFrontendIonic',
+  appId: 'com.palenque.drinky',
+  appName: 'Drinky',
   webDir: 'www'
 };
 

@@ -1,25 +1,15 @@
-<app-header>
-  <ion-toolbar>
-    <ion-title>Blog</ion-title>
-  </ion-toolbar>
-</app-header>
-
-
-<ion-content class="ion-padding">
-
-  @if (posts.length === 0) {
-    <ion-spinner></ion-spinner>
-  } @else {
-    <ion-list>
-      @for (post of posts; track post.id) {
-        <ion-item button (click)="openPost(post)">
-          <ion-label>
-            <h2>{{ post.title }}</h2>
-            <p>{{ post.contentSnippet }}</p>
-          </ion-label>
-        </ion-item>
-      }
-    </ion-list>
-  }
-
+<ion-content>
+  <div style="padding:16px;">
+    <ion-button expand="block" (click)="abrirHistorias()">
+      Abrir Historias Palenque
+    </ion-button>
+  </div>
+  <!-- Si prefieres mantener el iframe, puedes dejarlo debajo -->
+  <iframe
+    src="https://historiaspalenque.blogspot.com/2025/11/historias-palenque.html"
+    style="width:100%; height:70vh; border:none;"
+    referrerpolicy="no-referrer"
+    loading="lazy"
+    sandbox="allow-scripts allow-same-origin allow-popups"
+  ></iframe>
 </ion-content>
