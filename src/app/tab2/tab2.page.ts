@@ -438,7 +438,7 @@ export class Tab2Page {
       return;
     }
     
-    const correoIngresado = prompt(`📧 Para confirmar tu identidad, ingresa el correo electrónico registrado para ${usuario.nome}:`);
+    const correoIngresado = prompt(`Para confirmar tu identidad, ingresa el correo electrónico registrado para ${usuario.nome}:`);
     
     if (!correoIngresado) {
       console.log('❌ Verificación cancelada');
@@ -509,7 +509,7 @@ export class Tab2Page {
       bebidasID: p.id,
     };
     
-    console.log('📦 Creando apartado:', payload);
+    console.log(' Creando apartado:', payload);
     
     this.api.createApartado(payload).subscribe({
       next: (apartado) => {
@@ -559,28 +559,28 @@ export class Tab2Page {
     }
     
     const mensaje = `✓ Producto apartado exitosamente\n\n` +
-      `📦 Producto: ${producto.nombre}\n` +
-      `👤 Usuario: ${nombreUsuario}\n` +
-      `📧 Correo: ${emailUsuario}\n` +
-      `🔢 Cantidad: ${cantidad} unidad(es)\n` +
-      `💰 Total: ${(producto.precioMXN * cantidad).toFixed(2)} MXN` +
+      `Producto: ${producto.nombre}\n` +
+      `Usuario: ${nombreUsuario}\n` +
+      `Correo: ${emailUsuario}\n` +
+      `Cantidad: ${cantidad} unidad(es)\n` +
+      `Total: ${(producto.precioMXN * cantidad).toFixed(2)} MXN` +
       infoCata;
     
     alert(mensaje);
   }
 
   cargarTodosLosApartados(): void {
-    console.log('🔍 ========== INICIANDO CARGA DE APARTADOS ==========');
-    console.log('🔍 Usuarios en cache:', this.usuarios());
+    console.log(' ========== INICIANDO CARGA DE APARTADOS ==========');
+    console.log(' Usuarios en cache:', this.usuarios());
     
     this.api.findAllApartados().subscribe({
       next: (apartadosRaw) => {
-        console.log(`\n📦 ========== APARTADOS RAW DEL BACKEND (${apartadosRaw.length}) ==========`);
-        console.log('📦 Estructura completa:', JSON.stringify(apartadosRaw, null, 2));
+        console.log(`\n ========== APARTADOS RAW DEL BACKEND (${apartadosRaw.length}) ==========`);
+        console.log(' Estructura completa:', JSON.stringify(apartadosRaw, null, 2));
         
         if (apartadosRaw.length === 0) {
           this.apartados.set([]);
-          console.log('ℹ️ No hay apartados registrados');
+          console.log('No hay apartados registrados');
           return;
         }
         
