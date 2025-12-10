@@ -1,9 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal, computed, inject } from '@angular/core';
 import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
   IonContent,
   IonFab,
   IonFabButton,
@@ -25,7 +22,8 @@ import {
   IonSelectOption,
   IonBadge,
   ToastController,
-  AlertController
+  AlertController,
+  LoadingController
 } from '@ionic/angular/standalone';
 import { FormsModule } from '@angular/forms';
 import { addIcons } from 'ionicons';
@@ -33,7 +31,6 @@ import { add, search, arrowBack } from 'ionicons/icons';
 import { ProductoFormularioComponent } from '../pages/producto-formulario/producto-formulario.component';
 import { ServiceAPI } from '../services/service-api';
 import { Producto } from '../interfaces/productos';
-
 import { HeaderComponent } from 'src/app/components/header/header.component';
 
 interface Usuario {
@@ -83,7 +80,7 @@ interface Apartado {
     IonSelectOption,
     IonBadge,
     ProductoFormularioComponent,
-    HeaderComponent
+    HeaderComponent,
   ]
 })
 export class Tab2Page {
@@ -137,7 +134,8 @@ export class Tab2Page {
   constructor(
     private api: ServiceAPI,
     private toastController: ToastController,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private loadingController: LoadingController 
   ) {
     addIcons({ add, search, arrowBack });
     this.cargarCategorias();
@@ -293,75 +291,78 @@ export class Tab2Page {
     // }
   }
 
-  guardarProducto(productoData: Omit<Producto, 'id' | 'fechaCreacion'>): void {
-    // Buscar el ID de la categoría por nombre
+  async guardarProducto(productoData: Omit<Producto, 'id' | 'fechaCreacion'>): Promise<void> {
+    // 1. Validar Categoría
     const categoriaObj = this.categorias().find(c => c.nombre === productoData.categoria);
     
     if (!categoriaObj) {
-      console.error('❌ Categoría no encontrada:', productoData.categoria);
-      console.error('❌ Categorías disponibles:', this.categorias());
       this.mostrarToast('Error: Categoría no válida', 'danger');
       return;
     }
 
-    // Preparar datos exactamente como los espera el CreateBebidaDto del backend
+    // 2. Preparar datos
     const dataToSend = {
       nombre: String(productoData.nombre).trim(),
       descripcion: String(productoData.descripcion).trim(),
-      precio: Number(productoData.precioMXN),        // Backend espera 'precio' no 'precioMXN'
-      stock: Number(productoData.stockInicial),      // Backend espera 'stock' no 'stockInicial'
-      imagen: productoData.imagen ? String(productoData.imagen).trim() : 'https://images.unsplash.com/photo-1612528443702-f6741f70a049?w=300&h=400&fit=crop',
-      categoriaId: Number(categoriaObj.id)           // Backend espera 'categoriaId' como número
+      precio: Number(productoData.precioMXN),
+      stock: Number(productoData.stockInicial),
+      imagen: productoData.imagen ? String(productoData.imagen).trim() : 'https://ejemplo.com/default.jpg',
+      categoriaId: Number(categoriaObj.id)
     };
 
-    console.log('📤 Datos enviados al backend (formato DTO):', dataToSend);
-    console.log('📋 Tipos de datos:', {
-      nombre: typeof dataToSend.nombre,
-      descripcion: typeof dataToSend.descripcion,
-      precio: typeof dataToSend.precio + ' (valor: ' + dataToSend.precio + ')',
-      stock: typeof dataToSend.stock + ' (valor: ' + dataToSend.stock + ')',
-      imagen: typeof dataToSend.imagen,
-      categoriaId: typeof dataToSend.categoriaId + ' (valor: ' + dataToSend.categoriaId + ')'
+    // 3. CREAR Y MOSTRAR EL LOADING (Bloquea la pantalla)
+    const loading = await this.loadingController.create({
+      message: this.productoEditando() ? 'Actualizando...' : 'Guardando producto...',
+      spinner: 'crescent',
+      backdropDismiss: false // Evita que se cierre tocando afuera
     });
+    await loading.present();
 
+    // 4. Lógica de Guardado (Dentro del loading)
     if (this.productoEditando()) {
       const productoEditar = this.productoEditando()!;
       this.api.patchBebida(productoEditar.id, dataToSend).subscribe({
-        next: (res) => {
-          console.log('✅ Producto actualizado:', res);
+        next: async (res) => {
+          // Actualizar lista local
           const productos = this.productos().map((p) =>
             p.id === productoEditar.id
-              ? {
-                  ...p,
-                  ...productoData
-                }
+              ? { ...p, ...productoData }
               : p
           );
           this.productos.set(productos);
+          
+          // OCULTAR LOADING Y REDIRIGIR
+          await loading.dismiss(); 
           this.mostrarToast('Producto actualizado exitosamente', 'success');
-          this.cancelarForm();
+          this.cancelarForm(); // Regresa a la lista AHORA, no antes
         },
-        error: (err) => {
-          console.error('❌ Error actualizando bebida:', err);
+        error: async (err) => {
+          console.error('❌ Error actualizando:', err);
+          await loading.dismiss(); // Quitar bloqueo aunque falle
           this.mostrarToast('Error al actualizar el producto', 'danger');
         }
       });
     } else {
+      // Crear Nuevo
       this.api.postBebida(dataToSend).subscribe({
-        next: (created: any) => {
-          console.log('✅ Producto creado exitosamente:', created);
+        next: async (created: any) => {
           const newId = created?.id ?? created?._id ?? Math.max(...this.productos().map((p) => p.id), 0) + 1;
           const nuevoProducto: Producto = {
             id: newId,
             ...productoData,
             fechaCreacion: new Date()
           } as Producto;
+          
           this.productos.set([...this.productos(), nuevoProducto]);
+          
+          // OCULTAR LOADING Y REDIRIGIR
+          await loading.dismiss();
           this.mostrarToast('Producto guardado exitosamente', 'success');
-          this.cancelarForm();
+          this.cancelarForm(); // Regresa a la lista AHORA
         },
-        error: (err) => {
-          console.error('❌ Error creando bebida:', err);
+        error: async (err) => {
+          console.error('❌ Error creando:', err);
+          await loading.dismiss(); // Quitar bloqueo aunque falle
           this.mostrarToast('Error al guardar el producto', 'danger');
         }
       });

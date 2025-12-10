@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Browser } from '@capacitor/browser';
-import { HeaderComponent } from 'src/app/components/header/header.component';
-import { IonHeader } from "@ionic/angular/standalone";
 import { IonicModule } from "@ionic/angular";
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -12,7 +10,7 @@ import { Router } from '@angular/router';
   templateUrl: './tab4.component.html',
   styleUrls: ['./tab4.component.scss'],
 
-  imports: [HeaderComponent, IonicModule]
+  imports: [ IonicModule]
 })
 export class Tab4Component  implements OnInit {
   apiKey = 'AIzaSyC3ws9P2fMAhK6w7W6TV9cn6bAk4RsF6Ko';
