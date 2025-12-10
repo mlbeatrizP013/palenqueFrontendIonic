@@ -1,11 +1,11 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
+
+<ion-content [fullscreen]="true">
+
+<ion-toolbar>
     <ion-title class="header-title">Gestión de Experiencias</ion-title>
   </ion-toolbar>
   
-</ion-header>
- 
-<ion-content [fullscreen]="true">
+
   @if (currentView() === 'list') {
     <ion-fab class="fab-bottom-right fab-standard" vertical="bottom" horizontal="end" slot="fixed">
       <ion-fab-button (click)="navegarAFormulario()" aria-label="Nueva experiencia">
@@ -22,7 +22,7 @@
               <ion-col size="12" size-md="6" size-lg="4">
                 <ion-card>
                 <ion-card-header>
-                  <ion-card-title> {{ experiencia.name }}</ion-card-title>
+                  <ion-card-title size="30" size-md="6" size-lg="4"> {{ experiencia.name }}</ion-card-title>
                 </ion-card-header>
 
                 <ion-card-content>

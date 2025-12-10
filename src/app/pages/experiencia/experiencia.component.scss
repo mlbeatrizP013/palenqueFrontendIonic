@@ -1,24 +1,25 @@
 :host {
 
-  /* Header styling */
-  ion-header ion-toolbar {
+  /* --- HEADER CON SCROLL --- */
+  /* Esta clase controla la barra de título que ahora está dentro del contenido */
+  .scrolling-toolbar {
     --background: transparent;
     color: #fff;
     padding: 8px 0;
+    --border-width: 0; /* Elimina bordes pegajosos */
 
     ion-title,
     ion-title.header-title {
-      /* Mobile-friendly header title size */
       font-size: clamp(0.95rem, 3.5vw, 1.1rem);
       letter-spacing: -0.3px;
       text-align: center;
-      ///
-      /// 
-      /// 
-      /* PANEL DE ADMINISTRADOR */
-
+      
+      /* Estilos del Panel de Administrador */
       width: 289px;
       height: 25px;
+      
+      /* Posicionamiento relativo para mantener tu diseño original */
+      position: relative;
       left: calc(50% - 289px/2 - 2.5px);
       top: 14px;
 
@@ -29,8 +30,6 @@
       line-height: 25px;
 
       color: #000000;
-
-
     }
 
     ion-button {
@@ -45,7 +44,8 @@
     --background: var(--tierra);
     --padding-start: 8px;
     --padding-end: 8px;
-    --padding-top: 8px;
+    /* Quitamos el padding superior para que la toolbar empiece arriba del todo */
+    --padding-top: 0px; 
     --padding-bottom: 8px;
   }
 
@@ -111,40 +111,12 @@
   }
 
   /* Text utilities */
-  .text-primary {
-    color: var(--verde-agave);
-    font-weight: 600;
-  }
-
-  .text-success {
-    color: var(--verde-agave);
-    font-weight: 600;
-  }
-
-  .text-warning {
-    color: #F39C12;
-    font-weight: 600;
-  }
-
-  .text-danger {
-    color: var(--rojo-maguey);
-    font-weight: 600;
-  }
-
-  .text-pink {
-    color: var(--cobre-oro);
-    font-weight: 600;
-  }
-
-  .text-green {
-    color: var(--verde-agave);
-    font-weight: 600;
-  }
-
-  .text-warning {
-    color: #F39C12;
-    font-weight: 600;
-  }
+  .text-primary { color: var(--verde-agave); font-weight: 600; }
+  .text-success { color: var(--verde-agave); font-weight: 600; }
+  .text-warning { color: #F39C12; font-weight: 600; }
+  .text-danger { color: var(--rojo-maguey); font-weight: 600; }
+  .text-pink { color: var(--cobre-oro); font-weight: 600; }
+  .text-green { color: var(--verde-agave); font-weight: 600; }
 
   /* Empty state - Mobile friendly */
   .empty-state {
@@ -208,13 +180,15 @@
     }
   }
 
+  /* --- BOTONES IGUALES --- */
   .actions-grid {
     margin-top: 12px;
 
     ion-row {
       gap: 6px;
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+      /* ESTA LÍNEA HACE LA MAGIA: 3 Columnas idénticas */
+      grid-template-columns: 1fr 1fr 1fr; 
       width: 100%;
     }
 
@@ -325,21 +299,13 @@
     padding: 6px;
 
     @media (max-width: 480px) {
-      &[size="12"] {
-        width: 100%;
-      }
-
-      &[size-md="6"] {
-        width: 100%;
-      }
-
-      &[size-lg="4"] {
+      &[size="12"], &[size-md="6"], &[size-lg="4"] {
         width: 100%;
       }
     }
   }
 
-  /* FAB positioning to sit above the tabs on mobile (bottom-right) */
+  /* FAB positioning */
   ion-fab.fab-bottom-right {
     bottom: 68px;
     right: 12px;
@@ -349,9 +315,6 @@
       --background: #E53935;
       --color: #fff;
       --border-radius: 50%;
-      --box-shadow: 0 4px 12px rgba(229, 57, 53, 0.4);
-      --padding-start: 0;
-      --padding-end: 0;
       width: 56px;
       height: 56px;
       box-shadow: 0 4px 12px rgba(229, 57, 53, 0.4);

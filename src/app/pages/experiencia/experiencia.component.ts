@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Component, computed, signal, inject, input, output } from '@angular/core';
 import {
-  IonHeader,
   IonToolbar,
   IonTitle,
   IonContent,
@@ -40,7 +39,6 @@ import { ServiceAPI } from 'src/app/services/service-api';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    IonHeader,
     IonToolbar,
     IonTitle,
     IonContent,
